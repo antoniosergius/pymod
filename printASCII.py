@@ -2,68 +2,36 @@
 import util
 import sys
 
-POS_START=32
-POS_STOP=255
-RANGE_ERROR=-1
-
 def usage():
-    print("\nUsage: printASCII.py [stop]")
-    print("       printASCII.py [start stop]\n")
-    print("     : stop : int range 33-255.")
-    print("     : start: int range 32-254.")
-    print("     : use start only with stop arg.\n")
-    sys.exit(-1)
+   usage = '''Usage: printASCII.py [start stop]
+   start: int range 32-254.
+   stop : int range 33-255.'''
+   print(usage)
+   sys.exit(-1)
 
-def getAtt(boolExpr, intArg):
-    if boolExpr:
-        return intArg
-    else:
-        return RANGE_ERROR
+def show_ascii(start, end):
+   ord_list, chr_list = [],[]
+   for i in range(start, end+1):
+      ord_list.append(util.align(i,4))
+      chr_list.append(util.align(chr(i),4))
+   up, down, alltext = 'chr:','ord:',''
+   for i,_ in enumerate(ord_list):
+      if i!=0 and i%16==0:
+         alltext += "\n %s \n %s \n" %(up, down)
+         up, down = 'chr:','ord:'
+      up += chr_list[i]
+      down += ord_list[i]
+   alltext += "\n %s \n %s \n" %(up, down)
+   return alltext
 
-def getStop(arg):
-    stop=int(arg)
-    expr = POS_START<=stop<= POS_STOP
-    return getAtt(expr, stop)
+def show_all_ascii():
+   return show_ascii(32, 255)
 
-def get2ArgsStop(arg):
-    stop=int(arg)
-    expr = POS_START+1<=stop<=POS_STOP
-    return getAtt(expr, stop)
-
-def get2ArgsStart(arg):
-    start=int(arg)
-    expr = POS_START<=start<=POS_STOP-1
-    return getAtt(expr, start)
-
-def runWithOneArg():
-    try:
-        stop=getStop(sys.argv[1])
-        if stop==RANGE_ERROR:
+if __name__ == "__main__":
+   if len(sys.argv)>=3:
+      for s in sys.argv[1:3]:
+         if not s.isdigit():
             usage()
-        else:
-            util.printRangeASCII(POS_START, stop)
-    except ValueError:
-        usage()
-
-def runWithTwoArgs():
-    try:
-        start=get2ArgsStart(sys.argv[1])
-        stop=get2ArgsStop(sys.argv[2])
-        if start!=RANGE_ERROR and stop!=RANGE_ERROR and start<stop:
-            util.printRangeASCII(start, stop)
-        else:
-            usage()
-    except ValueError:
-        usage()
-
-nargs=len(sys.argv)
-
-if nargs==2:
-    runWithOneArg()
-elif nargs>=3:
-    runWithTwoArgs()
-else:
-    util.printASCII()
-sys.exit(0)
-
-
+      print(show_ascii(int(sys.argv[1]), int(sys.argv[2]))
+   else:
+       print(show_all_ascii())

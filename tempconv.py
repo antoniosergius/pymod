@@ -2,45 +2,36 @@
 import util
 import sys
 import re
-    
-def fexit(err, printmsg):
-   if printmsg:
-      print("\nUsage: tempconv.py temp c|f")
-      print("     : temp : float number.")
-      print("     : c|f: 'c'elsius or 'f'ahrenheit.\n")	
-   else:
-   print(err)
-   sys.exit(-1)  
+
+def convert_temperature(temp):
+   '''
+   tempconv(temp, unit) -> float
+
+   Raises TypeError se temp não for float ou int.
+   Raises ValueError se unit não for 'f' de fahrenheit ou 'c' de celsius.
+
+   Converte temperaturas de uma unidade para outra. Se for fornecido 'c'
+   a temperatura será convertida para fahrenheit. Se for fornecido 'f' para
+   unit, a função entende que o valor fornecido é em fahrenheit e converte
+   para celsius.
+   '''
+   temp = float(temp[:-1])
+   unit = temp[-1].upper()
+   return temp*9/5+32 if unit=='C' else (temp-32)*5/9
 
 def usage():
-   fexit("", True)
+   usage='''Usage: tempconv.py temp
+      temp : string - final position F or C (Celsius of Fahrenheit).'''
+   print(usage)
+   sys.exit(-1)
 
-nargs = len(sys.argv)
-if nargs != 3:
-   usage()
+if __name__ == '__main__':
+   if len(sys.argv) != 2:
+      usage()
+   temperature = sys.argv[1].upper()
+   if re.compile("^\d*[.]{0,1}[C|F]{1}$").match(temperature):
+      print(convert_temperature(temperature))
+   else
+      usage()
 
-arg1 = sys.argv[1]
-regx = re.compile("^\d*[.]{0,1}\d+$")
-if not regx.match(arg1):
-   fexit("Error: Invalid format number.", False)
-
-arg2 = sys.argv[2]
-regx = re.compile("^c$|^f$")
-if not regx.match(arg2):
-   fexit("Error: Invalid unit (c|f).", False)
-
-if arg2 == 'c':
-   unit = 'f'
-else:
-   unit = 'c'
-
-try:
-   newtemp = util.tempconv(float(arg1), arg2)
-   print(format(newtemp,'.2f'), chr(176)+unit)
-except TypeError as typErr:
-   print(typErr)
-except ValueError as valueErr:
-   print(valueErr)
-finally:
-   sys.exit(0)
 
