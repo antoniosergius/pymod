@@ -52,20 +52,20 @@ def printRangeASCII(start, end):
    Imprime um intervalo da tabela ASCII a partir do número 32 até 255.
    start é o valor inicial e end é o valor final do intervalo.
    '''
-   ordList, chrList = [],[]
+   ord_list, chr_list = [],[]
    for i in range(start, end+1):
-      ordList.append(align(i,4))
-      chrList.append(align(chr(i),4))
+      ord_list.append(align(i,4))
+      chr_list.append(align(chr(i),4))
 
-   textUp, textDown, fullTxt = 'chr:','ord:',''
-   for i in range(len(ordList)):
+   up, down, alltext = 'chr:','ord:',''
+   for i,_ in enumerate(ordList):
       if i!=0 and i%16==0:
-         fullTxt += '\n'+textUp+'\n'+textDown+'\n'
-         textUp, textDown = 'chr:','ord:'
-      textUp += chrList[i]
-      textDown += ordList[i]
-   fullTxt += '\n'+textUp+'\n'+textDown+'\n'
-   print(fullTxt)
+         alltext += "\n %s \n %s \n" %(up, down)
+         up, down = 'chr:','ord:'
+      up += chr_list[i]
+      down += ord_list[i]
+   alltext += "\n %s \n %s \n" %(up, down)
+   return alltext
 
 
 def mystrip(s):
@@ -102,9 +102,9 @@ def subsCount(sub, s):
 
    Conta a quantidade de substring sub que string contém.
    '''
-   if not sub:
-         return 0
    try:
+      if not sub:
+         return 0
       i = 0
       repeated = 0;
       while i < len(s):
@@ -114,27 +114,6 @@ def subsCount(sub, s):
       return repeated
    except:
       return -1
-
-def timeAfter(time, plus):
-   '''
-   timeAfter(time,plus) -> str
-
-   time deve ser str no formato hh:mm
-   plus é a quantidade de minutos a adicionar no horário fornecido
-   Retorna novo horário no formato hh:mm
-   '''
-   time = time.partition(":")
-   hour = int(time[0])
-   minute = int(time[2]) + plus
-   if minute>60:
-      hour += minute//60
-      minute = minute%60
-   if hour >= 24:
-      if hour == 24:
-         hour = 0
-      else:
-         hour = hour%24
-   return "%02d:%02d" % (hour, minute)
 
 def lower(char):
    '''

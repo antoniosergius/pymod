@@ -1,40 +1,34 @@
 #!/usr/bin/env python3.4
-import util
 import sys
 import re
 
 def usage():
-    print("\nUsage: timeafter.py time minutes")
-    print("     : time : hh:mm format.")
-    print("     : minutes: int value to add.\n")
-    sys.exit(-1)
-    
-def failExit(err):
-	print(err)
-	sys.exit(-1)    
-	
-def matches(value, expr):
-	regex = re.compile(expr)
-	return regex.match(value)
+   msg = '''Usage: timeafter.py hour addition\n
+       hour : hh:mm format.
+       addition: minute(s) to add.\n'''
+   print(msg)
+   sys.exit(-1)
 
-if len(sys.argv) != 3:
-	usage()
+def timeAfter(horary, addition):
+   horary = horary.partition(":")
+   hour, minute = int(horary[0]), int(horary[2])+int(addition)
+   if minute>60:
+      hour += minute//60
+      minute %= 60
+   if hour==24:
+      hour = 0
+   elif hour > 24:
+      hour %= 24
+   return "%02d:%02d" % (hour, minute)
 
-if not matches(sys.argv[1], "\d{0,1}\d:\d\d"):
-	failExit("Error: Invalid time format (hh:mm).\n")
+if __name__ == '__main__':
+   if len(sys.argv) != 3:
+      usage()
 
-if not matches(sys.argv[2], "\d+"):
-	failExit("Error: Invalid minute format.\n")
-	
-time = sys.argv[1]
-minutes = int(sys.argv[2])
-
-try:	
-	print(util.timeAfter(time, minutes))
-except TypeError as typErr:
-	print(typErr)
-except ValueError as valueErr:
-	print(valueErr)
-finally:
-	sys.exit(0)
-
+   hour, addition = sys.argv[1], sys.argv[2]
+   if not re.compile("\d{0,1}\d:\d\d").match(hour):
+      print("Error: Invalid time format (hh:mm).")
+   elif not re.compile("\d+").match(addition):
+      print("Error: Invalid minute format.")
+   else:
+      print(timeAfter(hour, addition))
