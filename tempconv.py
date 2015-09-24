@@ -5,23 +5,23 @@ import re
 
 def convert_temperature(temp):
    '''
-   tempconv(temp, unit) -> float
+   convert_temperature(temp) -> str
 
-   Raises TypeError se temp não for float ou int.
-   Raises ValueError se unit não for 'f' de fahrenheit ou 'c' de celsius.
-
-   Converte temperaturas de uma unidade para outra. Se for fornecido 'c'
-   a temperatura será convertida para fahrenheit. Se for fornecido 'f' para
-   unit, a função entende que o valor fornecido é em fahrenheit e converte
-   para celsius.
+   Converte temperaturas de uma unidade para outra.
+   A temperatura deve ser fornecida com C ou F no final.
    '''
+   unit = temp[-1]
    temp = float(temp[:-1])
-   unit = temp[-1].upper()
-   return temp*9/5+32 if unit=='C' else (temp-32)*5/9
+   result = ''
+   if unit=='C':
+      result = "%.2f%s" %(temp*9/5+32, 'F')
+   else:
+      result = "%.2f%s" %((temp-32)*5/9, 'C')
+   return result
 
 def usage():
    usage='''Usage: tempconv.py temp
-      temp : string - final position F or C (Celsius of Fahrenheit).'''
+       temp : string - final position F or C (Celsius of Fahrenheit).'''
    print(usage)
    sys.exit(-1)
 
@@ -29,9 +29,9 @@ if __name__ == '__main__':
    if len(sys.argv) != 2:
       usage()
    temperature = sys.argv[1].upper()
-   if re.compile("^\d*[.]{0,1}[C|F]{1}$").match(temperature):
+   if re.compile("^\d*[.]{0,1}\d*[C|F]{1}$").match(temperature):
       print(convert_temperature(temperature))
-   else
+   else:
       usage()
 
 
