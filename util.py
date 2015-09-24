@@ -1,48 +1,29 @@
 #!/usr/bin/env python3.4
-
-'''
-This program is free software; you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation; either version 2 of the License, or
-(at your option) any later version.
-
-This program is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with this program; if not, write to the Free Software
-Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
-MA 02110-1301, USA.
-
-
-util.py é um conjunto de funções úteis no dia a dia.
-Autor: Antônio Sérgio Garcia Ferreira
-Data: 24 Ago 2015
-'''
+#
+#  script.sh
+#
+#  Copyright 2015 Antônio Sérgio Garcia Ferreira <antoniosergio@mail.com>
+#
+#  This program is free software; you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 2 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program; if not, write to the Free Software
+#  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston,
+#  MA 02110-1301, USA.
+#
+#  2015/08/24 20:10:45
+#
+#  ---
+#
 import re
-
-def align(text, width):
-   '''
-   Alinha a str text com espaços de acordo com o tamanho definido em width.
-   '''
-   blanks = width - len(str(text))
-   right = blanks//2
-   left = right+blanks%2
-   return "%s %s %s" %(left*" ", text, right*" ")
-
-def alignc(text, width, char):
-   '''
-   Alinha a str text com espaços de acordo com o tamanho definido em width.
-   '''
-   blanks = width - len(str(text))
-   right = blanks//2
-   left = right+blanks%2
-   return "%s %s %s" %(left*char, text, right*char)
-
-def mystrip(s):
-   return s[1:-1]
 
 def adder(expr):
    '''
@@ -150,5 +131,3 @@ def is_registry_valid(reg):
          return is_valid_cpf(reg) if size==11 else is_valid_cnpj(reg)
    else:
       return False
-
-

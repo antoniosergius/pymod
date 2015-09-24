@@ -24,11 +24,36 @@
 #  ---
 #
 
-def subs_count(sub, s):
-   if not sub: return 0
+def align(text, width, char=' '):
+   '''
+   align(text, width, char=' ') -> str
+
+   Alinha a str text com espaços de acordo com o tamanho definido em width.
+   Retorna uma string no tamanho de width com text no centro.
+   '''
+   blanks = width - len(str(text))
+   right = blanks//2
+   left = right+blanks%2
+   return "%s %s %s" %(left*char, text, right*char)
+
+def mystrip(s):
+   '''
+   mystrip(s) -> str
+
+   Retora a string sem o primeiro e último caracteres.
+   '''
+   return s[1:-1]
+
+def subs_count(substring, s):
+   '''
+   subs_count(substring, s) -> int
+
+   Retorna a quantidade de ocorrências de sub em s.
+   '''
+   if not substring: return 0
    count=0
    for i,_ in enumerate(s):
-      if s[i:i+len(sub)] == sub:
+      if s[i:i+len(substring)] == substring:
          count+=1;
    return count
 
@@ -36,19 +61,29 @@ def lower(text):
    '''
    lower(text) -> str
 
-   Raise TypeError se text não for do tipo str
-
-   Retorna a versão minúscula do texto informado.
+   Retorna o texto informado em minúsculo ou -1 se text não for string.
    '''
    if not isinstance(text, str) or not text:
       return -1
-
    new = ''
    for i,ch in enumerate(text):
       position = ord(ch)
       new += chr(position+32) if 65<=position<=90 else ch
    return new
 
+def upper(text):
+   '''
+   upper(text) -> str
+
+   Retorna o texto informado em maiúsculo ou -1 se text não for string.
+   '''
+   if not isinstance(text, str) or not text:
+      return -1
+   new = ''
+   for i,ch in enumerate(text):
+      position = ord(ch)
+      new += chr(position-32) if 97<=position<=122 else ch
+   return new
 
 def is_palindrome(string):
    '''
