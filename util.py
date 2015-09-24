@@ -57,43 +57,7 @@ def adder(expr):
    return pref+suf
 
 
-def subs_count(sub, s):
-   if not sub: return 0
-   count=0
-   for i,_ in enumerate(s):
-      if s[i:i+len(sub)] == sub:
-         count+=1;
-   return count
 
-def lower(char):
-   '''
-   lower(char) -> str
-
-   Raise TypeError se char não for do tipo str
-
-   Retorna a versão minúscula do caracter informado.
-   Caso o caracter não seja alfabético, o mesmo fornecido é retornado.
-   '''
-   if not isinstance(char, str):
-      raise TypeError("Invalid types.")
-   if 64 < ord(char) <91:
-      return chr(ord(char)+32)
-   else:
-      return char
-
-def is_palindrome(string):
-   '''
-   ispalindrome(string) -> bool
-
-   Verifica se a string é palíndrome, ou seja, possui o mesmo formato
-   se for invertida. Por exemplo: ana, adida, 00a00, iiisssiii
-   '''
-   if string[0] != string[-1]:
-      return False
-   for i in range(1, len(string)-2):
-      if string[i] != string[-(i+1)]:
-         return False
-   return True
 
 def replace(old, new, lst):
    '''

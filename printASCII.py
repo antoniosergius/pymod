@@ -32,6 +32,6 @@ if __name__ == "__main__":
       for s in sys.argv[1:3]:
          if not s.isdigit():
             usage()
-      print(show_ascii(int(sys.argv[1]), int(sys.argv[2]))
+      print(show_ascii(int(sys.argv[1]), int(sys.argv[2])))
    else:
        print(show_all_ascii())
