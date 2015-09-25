@@ -1,6 +1,5 @@
-#!/usr/bin/env python3.4
 #
-#  script.sh
+#  util.py
 #
 #  Copyright 2015 Antônio Sérgio Garcia Ferreira <antoniosergio@mail.com>
 #
@@ -36,8 +35,6 @@ def adder(expr):
    pref = float(expr[:oper])
    suf = float(expr[oper+1:])
    return pref+suf
-
-
 
 
 def replace(old, new, lst):
