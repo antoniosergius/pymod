@@ -5,9 +5,9 @@
 import sys
 
 def isprime(n):
-   if n<=1: return False
-   if n==2: return True
-   divisors = list(range(3,int(n**0.5+1),2))
+   if type(n)!=int or n in {-1, 0, 1}: return False
+   if abs(n)==2: return True
+   divisors = list(range(3,int(abs(n)**0.5+1),2))
    divisors.insert(0,2)
    count = 1
    for num in divisors:
@@ -21,8 +21,6 @@ def make_1d_list(lst):
       for elem in inside_list:
          new.append(elem)
    return new
-
-
 
 if __name__=="__main__":
    if len(sys.argv)!=2:
