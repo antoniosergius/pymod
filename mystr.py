@@ -85,16 +85,29 @@ def upper(text):
       new += chr(position-32) if 97<=position<=122 else ch
    return new
 
-def is_palindrome(string):
+def is_palindrome(text):
    '''
    ispalindrome(string) -> bool
 
    Verifica se a string é palíndrome, ou seja, possui o mesmo formato
-   se for invertida. Por exemplo: ana, adida, 00a00, iiisssiii
+   se for invertida. Por exemplo: ana, adida, 00a00, iiisssiii, noninon, zazaz
    '''
-   if string[0] != string[-1]:
+   if text[0] != text[-1]:
       return False
-   for i in range(1, len(string)-2):
-      if string[i] != string[-(i+1)]:
+   #for i in range(1, len(text)-2):
+   for i in range(len(text[1:-2])):
+      if text[i] != text[-(i+1)]:
          return False
    return True
+
+def inverse(s, separator=' '):
+   if type(s)!=str or not s:
+      return -1
+   new=''
+   wordlist = s.split(separator)
+   for i,word in enumerate(wordlist):
+      for j,_ in enumerate(word):
+         new+=word[-(j+1)]
+      new+=separator
+   #remove last separator
+   return new[:-1]

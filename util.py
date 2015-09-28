@@ -1,3 +1,4 @@
+#!/usr/bin/env python3.4
 #
 #  util.py
 #
@@ -59,7 +60,7 @@ def is_valid_cpf(cpf):
    Retorna True se os digitos verificadores forem igual ao fornecido.
    Retorna False se os digitos forem diferentes.
    '''
-   if cpf[0]==cpf[-1] and cpf.count(cpf[0]) == 11:
+   if cpf[0]==cpf[-1] and cpf.count(cpf[0])==11:
       return False
    flag = 10
    count, summ = 0, 0
@@ -69,37 +70,6 @@ def is_valid_cpf(cpf):
          summ += int(cpf[count]) * i
          count += 1
       remainder = summ % 11
-      print("flag = %d, resto da divisão por 11 = %d" %(flag,remainder))
-      if remainder < 2 and cpf[flag-1] != '0':
-         return False
-      elif 11-remainder != int(cpf[flag-1]):
-         print("entrou no segundo if")
-         return False
-      count = 0
-      flag += 1
-   return True
-
-
-def is_valid_cpf(cpf):
-   '''
-   is_valid_cpf(cpf) -> bool
-
-   Faz o cálculo dos dois últimos digitos(verificadores) do cpf.
-   Retorna False se todos os digitos forem iguais.
-   Retorna True se os digitos verificadores forem igual ao fornecido.
-   Retorna False se os digitos forem diferentes.
-   '''
-   if cpf[0]==cpf[-1] and cpf.count(cpf[0]) == 11:
-      return False
-   flag = 10
-   count, summ = 0, 0
-   while flag <= 11:
-      summ = 0
-      for i in range(flag, 1, -1):
-         summ += int(cpf[count]) * i
-         count += 1
-      remainder = summ % 11
-      print("flag = %d, resto da divisão por 11 = %d" %(flag,remainder))
       if remainder < 2:
          if cpf[flag-1]!='0': return False
       elif 11-remainder != int(cpf[flag-1]):
