@@ -9,28 +9,24 @@ def isprime(n):
    isprime(n) -> bool
 
    Verifica se o número é primo. O método utilizado é o seguinte: inicialmente
-   considera-se -1,0,1 como não primos e o dois como primo. Em seguida é feita
+   é considerado -1,0,1 como não primos e o módulo de dois como primo. Em seguida é feita
    uma lista começando de 3 até a raiz quadrada do módulo do número fornecido, sem
-   os pares que são compostos. Para saber se o número n é primo precisa dividi-lo
-   por todos entre -1 e -n e 1 e n se penas os quatro forem os divisores o número é primo.
+   os pares que são compostos. O dois é inserido para para saber se n é par.
 
    '''
    if type(n)!=int or n in {-1, 0, 1}: return False
    if abs(n)==2: return True
    divisors = list(range(3,int(abs(n)**0.5+1),2))
-   divisors.insert(0,2)
-   count = 1
+   divisors.insert(0, 2)
+   count = 0
    for num in divisors:
-      if n%num==0:
+      if abs(n)%num==0:
          count+=1
-   return count==1
+   return count==0
 
 def flatten_list_old(lst):
-   '''
-
-   '''
    new=[]
-   if type(lst)!=list:
+   if type(lst)!=list or not lst:
       return new
    for inside_list in lst:
       for elem in inside_list:
@@ -39,7 +35,10 @@ def flatten_list_old(lst):
 
 def flatten_list(lst):
    '''
+   flatten_list(lst) -> list
 
+   Recebe uma lista de duas dimensões e retorna uma de dimensão única.
+   A técnica usada é conhecida como list comprehension
    '''
    if type(lst)!=list or not lst:
       return -1
@@ -48,7 +47,10 @@ def flatten_list(lst):
 
 def dict_statistics(dic):
    '''
+   dict_statistics(dic)
 
+   Imprime a média, soma, variância e o desvio padrão de um dicionário com
+   valores númericos.
    '''
    if type(dic)!=dict or len(dic) in (0,1):
       return -1
