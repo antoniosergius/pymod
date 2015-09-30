@@ -88,7 +88,7 @@ def is_cpf(cpf):
    Retorna True se os digitos verificadores forem igual ao fornecido.
    Retorna False se os digitos forem diferentes.
    '''
-   if cpf[0]==cpf[-1] and cpf.count(cpf[0])==11:
+   if cpf[:2]==cpf[9:] and cpf.count(cpf[2:9])==7:
       return False
    flag = 10
    count, summ = 0, 0
@@ -108,14 +108,13 @@ def is_cpf(cpf):
 
 def is_cnpj(cnpj):
    '''
-   is_valid_cnpj(cnpj) -> bool
+   is_cnpj(cnpj) -> bool
 
    Faz o cálculo dos dois últimos digitos(verificadores) do cnpj.
    Retorna True se os digitos verificadores forem igual ao fornecido.
    Retorna False se os digitos forem diferentes.
    '''
-   flag = 5
-   count, summ = 0, 0
+   count, summ, flag = 0, 0, 5
    while flag <= 6:
       summ = 0
       for i in range(flag, 1, -1):
@@ -133,7 +132,7 @@ def is_cnpj(cnpj):
       flag += 1
    return True
 
-def is_cpf_cnpj(reg):
+def is_cpf_cnpj(s):
    '''
    is_cpf_cnpj(s) -> bool
 
@@ -148,11 +147,8 @@ def is_cpf_cnpj(reg):
    '''
    if not isinstance(s, str):
       return False
-   length = len(s)
-   if length in {11,14}:
-      if not re.compile("^\d{%d}$" %length).match(s):
-         return False
-      else:
-         return is_cpf(s) if length==11 else is_cnpj(s)
-   else:
+   length, regex = len(s), re.compile("^\d{%d}$" %length)
+   if length not in (11,14) or not regex.match(s):
       return False
+   else:
+      return is_cpf(s) if length==11 else is_cnpj(s)
