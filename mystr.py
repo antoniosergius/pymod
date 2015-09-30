@@ -36,9 +36,9 @@ def align(text, width, char=' '):
    left = right+blanks%2
    return "%s %s %s" %(left*char, text, right*char)
 
-def mystrip(s):
+def strip(s):
    '''
-   mystrip(s) -> str
+   strip(s) -> str
 
    Retora a string sem o primeiro e último caracteres.
    '''
@@ -101,6 +101,11 @@ def is_palindrome(text):
    return True
 
 def inverse(s, separator=' '):
+   '''
+   inverse(s, separator=' ') -> str
+
+   Pega a frase s e inverte cada palavra. A ordem das palavras é mantida.
+   '''
    if type(s)!=str or not s:
       return -1
    new=''
@@ -109,5 +114,6 @@ def inverse(s, separator=' '):
       for j,_ in enumerate(word):
          new+=word[-(j+1)]
       new+=separator
-   #remove last separator
-   return new[:-1]
+   new.pop()
+   return new
+

@@ -25,19 +25,6 @@
 #
 import re
 
-def adder(expr):
-   '''
-   adder(expr) -> (int,float)
-
-   Recebe uma expressão no formato n+n. n pode ser int ou float.
-   Retorna o resultado da expressão fornecida.
-   '''
-   oper = expr.index("+")
-   pref = float(expr[:oper])
-   suf = float(expr[oper+1:])
-   return pref+suf
-
-
 def replace(old, new, lst):
    '''
    Substitui old por new na lista lst.
@@ -50,6 +37,42 @@ def replace(old, new, lst):
          lst.pop(i)
          lst.insert(i, new)
          break
+
+def flatten_list(lst):
+   '''
+   flatten_list(lst) -> list
+
+   Recebe uma lista de duas dimensões e retorna uma de dimensão única.
+   A técnica usada é conhecida como list comprehension
+   '''
+   if type(lst)!=list or not lst:
+      return -1
+   else:
+      return [num for elem in lst for num in elem]
+
+def dict_statistics(dic):
+   '''
+   dict_statistics(dic)
+
+   Imprime a média, soma, variância e o desvio padrão de um dicionário com
+   valores númericos.
+   '''
+   if type(dic)!=dict or len(dic) in (0,1):
+      return -1
+   summ = 0.0
+   for value in dic.values():
+      summ += value
+   rate = summ / len(dic)
+   variance = 0.0
+   for value in dic.values():
+      variance += (value - rate)**2
+   statistics='''
+      Rate = %.2f
+      Summ = %.2f
+      Data Variance    = %.2f
+      Stand. Deviation = %.2f
+   ''' %(rate, summ, variance/(len(dic)-1), variance**0.5)
+   print(statistics)
 
 def is_valid_cpf(cpf):
    '''
@@ -105,9 +128,9 @@ def is_valid_cnpj(cnpj):
       flag += 1
    return True
 
-def is_registry_valid(reg):
+def is_valid_registry(reg):
    '''
-   is_registry_valid(reg) -> bool
+   is_valid_registry(reg) -> bool
 
    Verifica se a str reg (CPF/CNPJ) é valido. reg deve conter apenas
    números e ser do tamanho 11 ou 14. Caso nenhuma das especificações
