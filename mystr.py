@@ -100,20 +100,15 @@ def is_palindrome(text):
          return False
    return True
 
-def inverse(s, separator=' '):
+def reverse(s):
    '''
-   inverse(s, separator=' ') -> str
+   reverse(s) -> str
 
    Pega a frase s e inverte cada palavra. A ordem das palavras é mantida.
    '''
-   if type(s)!=str or not s:
-      return -1
-   new=''
-   wordlist = s.split(separator)
-   for i,word in enumerate(wordlist):
-      for j,_ in enumerate(word):
-         new+=word[-(j+1)]
-      new+=separator
-   new.pop()
-   return new
-
+   if not isinstance(s, str) or not s:
+      return None
+   words=s.split()
+   for i in range(len(words)):
+      words[i] = words[i][::-1]
+   return ' '.join(words)

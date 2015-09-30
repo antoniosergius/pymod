@@ -38,7 +38,7 @@ def replace(old, new, lst):
          lst.insert(i, new)
          break
 
-def flatten_list(lst):
+def flatten_old(lst):
    '''
    flatten_list(lst) -> list
 
@@ -50,31 +50,36 @@ def flatten_list(lst):
    else:
       return [num for elem in lst for num in elem]
 
-def dict_statistics(dic):
+def flatten(it):
    '''
-   dict_statistics(dic)
+   flatten(it) -> list
+
+   Recebe uma lista de várias dimensões e retorna uma de dimensão única.
+   '''
+   if isinstance(it, list):
+      ls=[]
+      for item in it:
+         ls = ls + flatten(item)
+      return ls
+   else:
+      return [it]
+
+
+def stat(dic):
+   '''
+   stat(dic)
 
    Imprime a média, soma, variância e o desvio padrão de um dicionário com
    valores númericos.
    '''
-   if type(dic)!=dict or len(dic) in (0,1):
-      return -1
-   summ = 0.0
-   for value in dic.values():
-      summ += value
+   if not isinstance(dic, dict) or len(dic) in {0,1}:
+      return None
+   summ = sum(dic.values())
    rate = summ / len(dic)
-   variance = 0.0
-   for value in dic.values():
-      variance += (value - rate)**2
-   statistics='''
-      Rate = %.2f
-      Summ = %.2f
-      Data Variance    = %.2f
-      Stand. Deviation = %.2f
-   ''' %(rate, summ, variance/(len(dic)-1), variance**0.5)
-   print(statistics)
+   variance = max(dic.values())-min(dic.values())
+   return summ, rate, variance
 
-def is_valid_cpf(cpf):
+def is_cpf(cpf):
    '''
    is_valid_cpf(cpf) -> bool
 
@@ -101,7 +106,7 @@ def is_valid_cpf(cpf):
       flag += 1
    return True
 
-def is_valid_cnpj(cnpj):
+def is_cnpj(cnpj):
    '''
    is_valid_cnpj(cnpj) -> bool
 
@@ -128,27 +133,26 @@ def is_valid_cnpj(cnpj):
       flag += 1
    return True
 
-def is_valid_registry(reg):
+def is_cpf_cnpj(reg):
    '''
-   is_valid_registry(reg) -> bool
+   is_cpf_cnpj(s) -> bool
 
-   Verifica se a str reg (CPF/CNPJ) é valido. reg deve conter apenas
+   Verifica se a str s (CPF/CNPJ) é valida. reg deve conter apenas
    números e ser do tamanho 11 ou 14. Caso nenhuma das especificações
    citadas for verdadeira, o retorno será False. Após passar nos testes,
-   se o valor for 11, reg será considerado cpf; se for 14, reg será
+   se o valor for 11, s será considerado cpf; se for 14, s será
    considerado cnpj. Em seguida é feito os cálculos através das funções
-   is_valid_cpf(reg) ou is_valid_cnpj(reg). Se o cálculo validar o registro,
+   is_cpf(s) ou is_cnpj(s). Se o cálculo validar o registro,
    o retorno será True. Caso os digitos verificadores não estiverem
    corretos, o retorno será False.
    '''
-   if not isinstance(reg, str):
+   if not isinstance(s, str):
       return False
-   sset = {11,14}
-   size = len(reg)
-   if size in sset:
-      if not re.compile("^\d{%d}$" %size).match(reg):
+   length = len(s)
+   if length in {11,14}:
+      if not re.compile("^\d{%d}$" %length).match(s):
          return False
       else:
-         return is_valid_cpf(reg) if size==11 else is_valid_cnpj(reg)
+         return is_cpf(s) if length==11 else is_cnpj(s)
    else:
       return False
