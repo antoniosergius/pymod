@@ -72,7 +72,7 @@ def stat(dic):
    Imprime a média, soma, variância e o desvio padrão de um dicionário com
    valores númericos.
    '''
-   if not isinstance(dic, dict) or len(dic) in {0,1}:
+   if not isinstance(dic, dict) or len(dic) in (0,1):
       return None
    summ = sum(dic.values())
    rate = summ / len(dic)

@@ -4,25 +4,27 @@ import sys
 
 def usage():
    usage = '''Usage: printASCII.py [start stop]
-   start: int range 32-254.
-   stop : int range 33-255.'''
+   start: int >= 32.
+   stop : int > start.'''
    print(usage)
    sys.exit(-1)
 
 def show_ascii(start=32, end=255):
-   ord_list, chr_list = [],[]
+   if start < 32 or start > end:
+      usage()
+   ords, chrs = [],[]
    for i in range(start, end+1):
-      ord_list.append(mystr.align(i,4))
-      chr_list.append(mystr.align(chr(i),4))
-   up, down, alltext = 'chr:','ord:',''
-   for i,_ in enumerate(ord_list):
-      if i!=0 and i%16==0:
-         alltext += "\n %s \n %s \n" %(up, down)
+      ords.append(mystr.align(i,4))
+      chrs.append(mystr.align(chr(i),4))
+   up, down, table = 'chr:','ord:',''
+   for i in range(len(ords)):
+      if i and not i%16:
+         table += "\n %s \n %s \n" %(up, down)
          up, down = 'chr:','ord:'
-      up += chr_list[i]
-      down += ord_list[i]
-   alltext += "\n %s \n %s \n" %(up, down)
-   return alltext
+      up += chrs[i]
+      down += ords[i]
+   table += "\n %s \n %s \n" %(up, down)
+   return table
 
 if __name__ == "__main__":
    if len(sys.argv)>=3:

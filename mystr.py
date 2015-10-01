@@ -52,7 +52,7 @@ def subs_count(substring, s):
    '''
    if not substring: return 0
    count=0
-   for i,_ in enumerate(s):
+   for i in range(len(s)):
       if s[i:i+len(substring)] == substring:
          count+=1;
    return count
@@ -94,7 +94,6 @@ def is_palindrome(text):
    '''
    if text[0] != text[-1]:
       return False
-   #for i in range(1, len(text)-2):
    for i in range(len(text[1:-2])):
       if text[i] != text[-(i+1)]:
          return False
