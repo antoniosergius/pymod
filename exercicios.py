@@ -2,6 +2,7 @@
 #
 #  2015/09/25 13:43:29
 #
+
 def mysort(lst, pos=0, reverse=False):
    '''
    mysort(lst, pos=0, reverse=False) -> list
@@ -17,3 +18,18 @@ def mysort(lst, pos=0, reverse=False):
    lst.sort(key=_key, reverse=reverse)
    return lst
 
+def file_info(name):
+   '''
+   Imprime informações sobre o arquivo cujo nome foi fornecido.
+   '''
+   try:
+      with open(name,'r') as file:
+         text=''
+         for line in file: text+=line
+         chars=len(text)
+         lines=len(text.split("\n"))
+         words=len(text.split())
+         print("O arquivo '%s' tem %d caractere(s), %d linhas e %d palavras."\
+                %(name, chars, lines, words))
+   except IOError:
+      print("Arquivo não encontrado!")
