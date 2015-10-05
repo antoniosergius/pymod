@@ -29,7 +29,23 @@ def file_info(name):
          chars=len(text)
          lines=len(text.split("\n"))
          words=len(text.split())
-         print("O arquivo '%s' tem %d caractere(s), %d linhas e %d palavras."\
-                %(name, chars, lines, words))
+         print("'%s': %d caractere(s), %d linha(s) e %d palavra(s)." %(name, chars, lines, words))
    except IOError:
       print("Arquivo não encontrado!")
+
+def read_file(name):
+   readed = ''
+   with open(name,"r") as file:
+      for number,line in enumerate(file):
+         readed+= "%d %s" %(number,line)
+   return readed
+
+def write_file(filename, s):
+   with open(filename, "w") as f:
+      f.write(s)
+
+
+if __name__=="__main__":
+   for f in pathlib.Path('.').iterdir():
+      if not f.is_dir():
+         file_info(str(f))

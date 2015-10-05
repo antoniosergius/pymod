@@ -38,18 +38,6 @@ def replace(old, new, lst):
          lst.insert(i, new)
          break
 
-def flatten_old(lst):
-   '''
-   flatten_list(lst) -> list
-
-   Recebe uma lista de duas dimensões e retorna uma de dimensão única.
-   A técnica usada é conhecida como list comprehension
-   '''
-   if type(lst)!=list or not lst:
-      return -1
-   else:
-      return [num for elem in lst for num in elem]
-
 def flatten(it):
    '''
    flatten(it) -> list
@@ -69,8 +57,7 @@ def stat(dic):
    '''
    stat(dic)
 
-   Imprime a média, soma, variância e o desvio padrão de um dicionário com
-   valores númericos.
+   Imprime a média, soma, variação de um dicionário com valores númericos.
    '''
    if not isinstance(dic, dict) or len(dic) in (0,1):
       return None

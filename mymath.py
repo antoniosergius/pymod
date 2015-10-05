@@ -41,7 +41,7 @@ def is_prime(n):
    '''
    isprime(n) -> bool
 
-   Verifica se o número n REAL é primo. O método utilizado é o seguinte: inicialmente
+   Verifica se o número n inteiro REAL é primo. O método utilizado é o seguinte: inicialmente
    é considerado -1,0,1 como não primos e o módulo de dois como primo. Em seguida é feita
    uma lista começando de 3 até a raiz quadrada do módulo do número fornecido, sem
    os pares que são compostos. O número 2 (dois) é inserido para para saber se n é par.
