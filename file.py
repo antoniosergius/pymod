@@ -23,30 +23,46 @@
 #
 #  ---
 #
-import os.path
+from os.path import exists, isfile, getsize, abspath
+
 def info(filename):
    '''
    Imprime informações sobre o arquivo cujo nome foi fornecido.
    '''
+   filename = abspath(filename)
+   if exists(filename) and isfile(filename) and getsize(filename)>0:
+      try:
+         with open(filename) as objfile:
+            content, line_count = '', 1
+            for line in objfile:
+               content += line
+               line_count += 1
+         return "%s : %d caractere(s), %d linha(s) e %d palavra(s)." \
+                  %(filename, len(content), line_count, len(content.split()))
+      except (UnicodeDecodeError, OSError):
+         pass
+   return None
 
+def read(filename):
+   filename = abspath(filename)
+   if exists(filename) and isfile(filename) and getsize(filename)>0:
+      try:
+         readed = ''
+         with open(filename) as f:
+            for number,line in enumerate(f):
+               readed+= "%d %s" %(number,line)
+         return readed
+      except (UnicodeDecodeError, OSError):
+         pass
+   return None
+
+def write(filename, s):
+   '''
+   Cria um arquivo e escreve s dentro. Caso já exista um arquivo com o nome informado, o erro
+   é impresso na tela.
+   '''
    try:
-      with open(filename,'r') as file:
-         text=''
-         for line in file: text+=line
-         chars=len(text)
-         lines=len(text.split("\n"))
-         words=len(text.split())
-         print("'%s': %d caractere(s), %d linha(s) e %d palavra(s)." %(name, chars, lines, words))
-   except IOError:
-      print("Arquivo não encontrado!")
-
-def read_file(name):
-   readed = ''
-   with open(name,"r") as file:
-      for number,line in enumerate(file):
-         readed+= "%d %s" %(number,line)
-   return readed
-
-def write_file(filename, s):
-   with open(filename, "w") as f:
-      f.write(s)
+      with open(filename, mode="x") as f:
+         f.write(s)
+   except (UnicodeDecodeError, OSError) as e:
+      print(e)
