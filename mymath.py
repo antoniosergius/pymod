@@ -58,3 +58,14 @@ def is_prime(n):
          return False
    else:
       return True
+
+def matrix_sum(*matrices):
+   '''
+   Soma matrizes de duas dimensões
+   '''
+   head, *tail = matrices
+   for matrix in tail:
+      for x,row in enumerate(matrix):
+         for y,col in enumerate(row):
+            head[x][y] += col
+   return head

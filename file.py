@@ -26,43 +26,57 @@
 from os.path import exists, isfile, getsize, abspath
 
 def info(filename):
-   '''
-   Imprime informações sobre o arquivo cujo nome foi fornecido.
-   '''
+   '''Exibe informações sobre o arquivo fornecido'''
    filename = abspath(filename)
-   if exists(filename) and isfile(filename) and getsize(filename)>0:
-      try:
-         with open(filename) as objfile:
-            content, line_count = '', 1
-            for line in objfile:
-               content += line
-               line_count += 1
-         return "%s : %d caractere(s), %d linha(s) e %d palavra(s)." \
-                  %(filename, len(content), line_count, len(content.split()))
-      except (UnicodeDecodeError, OSError):
-         pass
-   return None
+   try:
+      with open(filename) as f:
+         text = f.read()
+         return "%s : %d char(s), %d linha(s) e %d palavra(s)." \
+                 %(filename, len(text), text.count("\n"), len(text.split()))
+   except (UnicodeDecodeError, OSError) as e:
+      print(e)
+
+def read_lines(filename):
+   '''Lê o arquivo fornecido e retorna uma lista com as linhas'''
+   filename = abspath(filename)
+   try:
+      with open(filename) as f:
+         return f.readlines()
+   except (UnicodeDecodeError, OSError) as e:
+      print(e)
 
 def read(filename):
+   '''Lê todas as linhas do arquivo em uma única strig e a retorna'''
    filename = abspath(filename)
-   if exists(filename) and isfile(filename) and getsize(filename)>0:
-      try:
-         readed = ''
-         with open(filename) as f:
-            for number,line in enumerate(f):
-               readed+= "%d %s" %(number,line)
-         return readed
-      except (UnicodeDecodeError, OSError):
-         pass
-   return None
+   try:
+      with open(filename) as f: return f.read()
+   except (UnicodeDecodeError, OSError) as e:
+      print(e)
 
 def write(filename, s):
-   '''
-   Cria um arquivo e escreve s dentro. Caso já exista um arquivo com o nome informado, o erro
-   é impresso na tela.
-   '''
+   '''Escreve s dentro do arquivo filename não existente.'''
    try:
-      with open(filename, mode="x") as f:
-         f.write(s)
+      with open(filename, mode="x") as f: f.write(s)
    except (UnicodeDecodeError, OSError) as e:
+     print(e)
+
+def write_lines(filename, lines):
+   '''Cria um arquivo e escreve a lista lines dentro.'''
+   try:
+      with open(filename, mode="w") as f:
+         for line in lines: print(line, file=f)
+   except (UnicodeDecodeError, OSError) as e:
+     print(e)
+
+def read_csv(filename):
+   '''Lê um arquivo csv e retorna uma lista de tuplas das linhas.'''
+   try:
+      with open(filename) as f:
+         data=[]
+         for line in filter(bool, f):
+            *fields, last = line.split(",")
+            fields.append(last.rstrip())
+            data.append(tuple(fields))
+         return data
+   except (IOError,UnicodeDecodeError) as e:
       print(e)
