@@ -97,7 +97,8 @@ def iscadastro(cad):
             summ += int(cnpj[count])*i
             count += 1
          remainder = summ % 11
-         if remainder < 2 and cnpj[flag+7] != '0': return False
+         if remainder < 2:
+            if cnpj[flag+7] != '0': return False
          elif 11 - remainder != int(cnpj[flag+7]): return False
          count = 0
          flag += 1
@@ -114,7 +115,8 @@ def iscadastro(cad):
             summ += int(cpf[count])*i
             count += 1
          remainder = summ % 11
-         if remainder < 2 and cpf[flag-1]!='0': return False
+         if remainder < 2:
+            if cpf[flag-1]!='0': return False
          elif 11-remainder != int(cpf[flag-1]): return False
          count = 0
          flag += 1
