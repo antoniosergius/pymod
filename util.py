@@ -80,76 +80,57 @@ def stat(dic):
    variance = max(dic.values())-min(dic.values())
    return summ, rate, variance
 
-def is_cpf(cpf):
+def iscadastro(cad):
    '''
-   is_valid_cpf(cpf) -> bool
+   Verifica se cad é um cadastro (cpf/cnpj) válido.
+   Retorna True se for válido.
+   '''
+   def _iscnpj(cnpj):
+      '''Função interna que verifica o cnpj.'''
+      count, summ, flag = 0, 0, 5
+      while flag <= 6:
+         summ = 0
+         for i in range(flag, 1, -1):
+            summ += int(cnpj[count])*i
+            count += 1
+         for i in range(9, 1, -1):
+            summ += int(cnpj[count])*i
+            count += 1
+         remainder = summ % 11
+         if remainder < 2 and cnpj[flag+7] != '0': return False
+         elif 11 - remainder != int(cnpj[flag+7]): return False
+         count = 0
+         flag += 1
+      else: return True
 
-   Faz o cálculo dos dois últimos digitos(verificadores) do cpf.
-   Retorna False se todos os digitos forem iguais.
-   Retorna True se os digitos verificadores forem igual ao fornecido.
-   Retorna False se os digitos forem diferentes.
-   '''
-   if cpf[:2]==cpf[9:] and cpf.count(cpf[2:9])==7:
+   def _iscpf(cpf):
+      '''Função interna que verifica o cpf.'''
+      head,*middle,tail = cpf
+      if head==tail and middle.count(head)==9: return False
+      count, summ, flag = 0, 0, 10
+      while flag <= 11:
+         summ = 0
+         for i in range(flag, 1, -1):
+            summ += int(cpf[count])*i
+            count += 1
+         remainder = summ % 11
+         if remainder < 2 and cpf[flag-1]!='0': return False
+         elif 11-remainder != int(cpf[flag-1]): return False
+         count = 0
+         flag += 1
+      else: return True
+
+   if not isinstance(cad, str):
       return False
-   flag = 10
-   count, summ = 0, 0
-   while flag <= 11:
-      summ = 0
-      for i in range(flag, 1, -1):
-         summ += int(cpf[count]) * i
-         count += 1
-      remainder = summ % 11
-      if remainder < 2:
-         if cpf[flag-1]!='0': return False
-      elif 11-remainder != int(cpf[flag-1]):
-         return False
-      count = 0
-      flag += 1
-   return True
-
-def is_cnpj(cnpj):
-   '''
-   is_cnpj(cnpj) -> bool
-
-   Faz o cálculo dos dois últimos digitos(verificadores) do cnpj.
-   Retorna True se os digitos verificadores forem igual ao fornecido.
-   Retorna False se os digitos forem diferentes.
-   '''
-   count, summ, flag = 0, 0, 5
-   while flag <= 6:
-      summ = 0
-      for i in range(flag, 1, -1):
-         summ += int(cnpj[count])*i
-         count += 1
-      for i in range(9, 1, -1):
-         summ += int(cnpj[count])*i
-         count += 1
-      remainder = summ % 11
-      if remainder < 2:
-         if cnpj[flag+7] != '0': return False
-      elif 11-remainder != int(cnpj[flag+7]):
-         return False
-      count = 0
-      flag += 1
-   return True
-
-def is_cpf_cnpj(s):
-   '''
-   is_cpf_cnpj(s) -> bool
-
-   Verifica se a str s (CPF/CNPJ) é valida. reg deve conter apenas
-   números e ser do tamanho 11 ou 14. Caso nenhuma das especificações
-   citadas for verdadeira, o retorno será False. Após passar nos testes,
-   se o valor for 11, s será considerado cpf; se for 14, s será
-   considerado cnpj. Em seguida é feito os cálculos através das funções
-   is_cpf(s) ou is_cnpj(s). Se o cálculo validar o registro,
-   o retorno será True. Caso os digitos verificadores não estiverem
-   corretos, o retorno será False.
-   '''
-   if not isinstance(s, str):
+   elif not cad.isdigit():
       return False
-   length, regex = len(s), re.compile("^\d{%d}$" %length)
-   if length not in (11,14) or not regex.match(s):
-      return False
-   else:
-      return is_cpf(s) if length==11 else is_cnpj(s)
+   size = len(cad)
+   if size==11:
+      return _iscpf(cad)
+   elif size==14:
+      return _iscnpj(cad)
+   elif size>=15 and cad[0]=='0':
+      head, tail = cad[:size-14], cad[size-14:]
+      if head.count('0') == len(head):
+         return _iscnpj(tail)
+   return False
