@@ -109,11 +109,11 @@ def csv_to_dict(fn):
    '''
    try:
       with open(fn) as fn:
-         header, *data = [each.split(',') for each in [ line.rstrip() for line in fn ]]
+         header, *data = [ line.rstrip().split(',') for line in fn ]
    except (IOError,UnicodeDecodeError) as e:
       sys.stderr.write(e)
       return []
    else:
-      datalist=[dict(zip(header,rec)) for rec in data]
-      return {rec['cadastro']:rec for rec in datalist}
+      datalist = [ dict(zip(header,rec)) for rec in data ]
+      return { rec['cadastro']:rec for rec in datalist }
 
