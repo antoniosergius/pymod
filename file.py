@@ -26,46 +26,43 @@
 import sys
 from os.path import exists, isfile, getsize, abspath
 
-def info(filename):
+def info(fn):
    '''Exibe informações sobre o arquivo fornecido'''
-   filename = abspath(filename)
    try:
-      with open(filename) as f:
+      with open(fn) as f:
          text = f.read()
-         return "%s : %d char(s), %d linha(s) e %d palavra(s)." \
-                 %(filename, len(text), text.count("\n"), len(text.split()))
+      return "%s : %d char(s), %d linha(s) e %d palavra(s)." \
+              %(fn, len(text), text.count("\n"), len(text.split()))
    except (UnicodeDecodeError, OSError) as e:
       print(e)
 
-def read_lines(filename):
+def readlines(fn):
    '''Lê o arquivo fornecido e retorna uma lista com as linhas'''
-   filename = abspath(filename)
    try:
-      with open(filename) as f:
-         return f.readlines()
+      with open(fn) as f: return f.readlines()
    except (UnicodeDecodeError, OSError) as e:
       print(e)
 
-def read(filename):
+
+def read(fn):
    '''Lê todas as linhas do arquivo em uma única strig e a retorna'''
-   filename = abspath(filename)
    try:
-      with open(filename) as f: return f.read()
+      with open(fn) as f: return f.read()
    except (UnicodeDecodeError, OSError) as e:
       print(e)
 
-def write(filename, s):
+def write(fn, s):
    '''Escreve s dentro do arquivo filename não existente.'''
    try:
-      with open(filename, mode="x") as f: f.write(s)
+      with open(fn, mode="wt") as f: f.write(s)
    except (UnicodeDecodeError, OSError) as e:
      print(e)
 
-def write_lines(filename, lines):
+def writelines(fn, linelist):
    '''Cria um arquivo e escreve a lista lines dentro.'''
    try:
-      with open(filename, mode="w") as f:
-         for line in lines: print(line, file=f)
+      with open(fn, mode="wt") as f:
+         for line in linelist: print(line, file=f)
    except (UnicodeDecodeError, OSError) as e:
      print(e)
 
@@ -112,7 +109,7 @@ def csv_to_dict(fn):
          header, *data = [ line.rstrip().split(',') for line in fn ]
    except (IOError,UnicodeDecodeError) as e:
       sys.stderr.write(e)
-      return []
+      return None
    else:
       datalist = [ dict(zip(header,rec)) for rec in data ]
       return { rec['cadastro']:rec for rec in datalist }
