@@ -80,7 +80,7 @@ def stat(dic):
    variance = max(dic.values())-min(dic.values())
    return summ, rate, variance
 
-def valid(cad):
+def validate(cad):
    '''
    Verifica se cad é um cadastro (cpf/cnpj) válido.
    Retorna True se for válido.

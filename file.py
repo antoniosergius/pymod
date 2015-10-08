@@ -23,6 +23,7 @@
 #
 #  ---
 #
+import sys
 from os.path import exists, isfile, getsize, abspath
 
 def info(filename):
@@ -80,3 +81,39 @@ def read_csv(filename):
          return data
    except (IOError,UnicodeDecodeError) as e:
       print(e)
+
+def csv_to_dict(fn):
+   '''
+   Primeiramente o conteúdo do arquivo lido é dividido entre a primeira posição (o header com nome
+   de todos os campos) e os dados. Nesse processo as funções rstrip() e split(',') cuidam de tirar
+   os caracteres fim de linha e dividir a string (separador ',') e trasformar em lista.
+
+   Neste momento os dados estão da seguinte forma:
+   header -> ['nome','cadastro', ....]
+   data -> [['Antonio Sergio','10008121205', ...], ['Goncalves Jr.','84421541241', ...], ...]
+
+   O próximo passoo é criar um dicionário que a chave seja um campo principal ('cadastro' no
+   meu caso) e o valor seja a representação do registro em forma de dicionário. A variável datalist
+   receberá uma lista de dicionários de cada registro. A função zip trata de combinar o nome dos
+   campos com os valores.
+
+   datalist -> [ {'nome':'Antonio Sergio','cadastro':'10008121205',...},
+                 {'nome':'Goncalves Jr.' ,'cadastro':'84421541241',...},
+                ... ]
+
+   Finalmente é retornado outro dicionário no seguinte formato:
+   { '10008121205': {'nome':'Antonio Sergio', 'cadastro':'10008121205', ....},
+     '84421541241': {'nome':'Goncalves Jr.' , 'cadastro':'84421541241', ....},
+      ... }
+
+   '''
+   try:
+      with open(fn) as fn:
+         header, *data = [each.split(',') for each in [ line.rstrip() for line in fn ]]
+   except (IOError,UnicodeDecodeError) as e:
+      sys.stderr.write(e)
+      return []
+   else:
+      datalist=[dict(zip(header,rec)) for rec in data]
+      return {rec['cadastro']:rec for rec in datalist}
+
