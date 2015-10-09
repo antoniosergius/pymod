@@ -66,18 +66,15 @@ def writelines(fn, linelist):
    except (UnicodeDecodeError, OSError) as e:
      print(e)
 
-def read_csv(filename):
-   '''Lê um arquivo csv e retorna uma lista de tuplas das linhas.'''
+def read_csv(fn):
+   '''Lê um arquivo csv e retorna uma lista de dicionários das linhas.'''
    try:
-      with open(filename) as f:
-         data=[]
-         for line in filter(bool, f):
-            *fields, last = line.split(",")
-            fields.append(last.rstrip())
-            data.append(tuple(fields))
-         return data
+      with open(fn) as f:
+         header, *data = [ line.rstrip().split(',') for line in f if line]
    except (IOError,UnicodeDecodeError) as e:
       print(e)
+   else:
+      return [ dict(zip(header,record)) for record in data ]
 
 def csv_to_dict(fn):
    '''
@@ -86,8 +83,9 @@ def csv_to_dict(fn):
    os caracteres fim de linha e dividir a string (separador ',') e trasformar em lista.
 
    Neste momento os dados estão da seguinte forma:
+
    header -> ['nome','cadastro', ....]
-   data -> [['Antonio Sergio','10008121205', ...], ['Goncalves Jr.','84421541241', ...], ...]
+   data   -> [['Antonio Sergio','10008121205', ...], ['Goncalves Jr.','84421541241', ...], ...]
 
    O próximo passoo é criar um dicionário que a chave seja um campo principal ('cadastro' no
    meu caso) e o valor seja a representação do registro em forma de dicionário. A variável datalist
@@ -105,12 +103,11 @@ def csv_to_dict(fn):
 
    '''
    try:
-      with open(fn) as fn:
-         header, *data = [ line.rstrip().split(',') for line in fn ]
-   except (IOError,UnicodeDecodeError) as e:
-      sys.stderr.write(e)
-      return None
+      with open(fn) as f:
+         header, *data = [ line.rstrip().split(',') for line in f if line]
+   except (OSError,UnicodeDecodeError) as e:
+      print(e)
    else:
-      datalist = [ dict(zip(header,rec)) for rec in data ]
+      datalist = [ dict(zip(header,record)) for record in data ]
       return { rec['cadastro']:rec for rec in datalist }
 

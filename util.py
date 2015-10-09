@@ -28,7 +28,7 @@ import re
 def replace(old, new, lst):
    '''
    Substitui old por new na lista lst.
-   Raises TypeError se lst não for list.
+   Raises TypeError se lst não for uma lista.
    '''
    if not isinstance(lst, list):
       raise TypeError("Error: Invalid type. lst must be list.")
@@ -54,25 +54,19 @@ def flatten(it):
 
 def mysort(lst, pos=0, reverse=False):
    '''
-   mysort(lst, pos=0, reverse=False) -> list
-
    Recebe uma lista de dupla dimensão (matriz) e ordena pela posição especificada
    no argumento pos. Se for omitido a list será ordenada com base no primeiro item
    (pos 0).
    '''
-   if not isinstance(lst,list) or not list or pos>len(lst[0])-1:
+   if not isinstance(lst,list) or not lst or pos>len(lst[0])-1:
       return None
    def _key(x):
       return x[pos]
    lst.sort(key=_key, reverse=reverse)
    return lst
 
-def stat(dic):
-   '''
-   stat(dic)
-
-   Imprime a média, soma, variação de um dicionário com valores númericos.
-   '''
+def statistics(dic):
+   '''Retorna a média, soma, variação de um dicionário com valores númericos.'''
    if not isinstance(dic, dict) or len(dic) in (0,1):
       return None
    summ = sum(dic.values())
@@ -90,29 +84,29 @@ def validate(cad):
       count, summ, flag = 0, 0, 5
       while flag <= 6:
          summ = 0
-         for i in range(flag, 1, -1):
-            summ += int(cnpj[count])*i
+         for n in range(flag, 1, -1):
+            summ += int(cnpj[count])*n
             count += 1
-         for i in range(9, 1, -1):
-            summ += int(cnpj[count])*i
+         for n in range(9, 1, -1):
+            summ += int(cnpj[count])*n
             count += 1
          remainder = summ % 11
          if remainder < 2:
             if cnpj[flag+7] != '0': return False
-         elif 11 - remainder != int(cnpj[flag+7]): return False
+         elif 11-remainder != int(cnpj[flag+7]): return False
          count = 0
          flag += 1
       else: return True
 
    def _iscpf(cpf):
       '''Função interna que verifica o cpf.'''
-      head,*middle,tail = cpf
-      if head==tail and middle.count(head)==9: return False
+      head,*body,tail = cpf
+      if head==tail and body.count(head)==9: return False
       count, summ, flag = 0, 0, 10
       while flag <= 11:
          summ = 0
-         for i in range(flag, 1, -1):
-            summ += int(cpf[count])*i
+         for n in range(flag, 1, -1):
+            summ += int(cpf[count])*n
             count += 1
          remainder = summ % 11
          if remainder < 2:
@@ -132,7 +126,9 @@ def validate(cad):
    elif size==14:
       return _iscnpj(cad)
    elif size>=15 and cad[0]=='0':
-      head, tail = cad[:size-14], cad[size-14:]
-      if head.count('0') == len(head):
-         return _iscnpj(tail)
+      START = slice(size-14)
+      END = slice(size-14,size)
+      prefix, rest = cad[START], cad[END]
+      if prefix.count('0') == len(prefix):
+         return _iscnpj(rest)
    return False
