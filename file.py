@@ -23,50 +23,70 @@
 #
 #  ---
 #
-import sys
-from os.path import exists, isfile, getsize, abspath
-
-def info(fn):
-   '''Exibe informações sobre o arquivo fornecido'''
+def split(fn, nbytes):
+   '''
+   Exercicio 4 - Python para desenvolvedores.
+   Divide o arquivo fn em nbytes e grava em novos arquivos. Se o arquivo for arq.txt, será gravado
+   arq.txt_001, arq.txt_002, etc..'''
    try:
       with open(fn) as f:
-         text = f.read()
-      return "%s : %d char(s), %d linha(s) e %d palavra(s)." \
-              %(fn, len(text), text.count("\n"), len(text.split()))
-   except (UnicodeDecodeError, OSError) as e:
+         count=1
+         stream = f.read(nbytes)
+         while stream:
+            new = "%s_%03d" %(fn,count)
+            with open(new, mode='wt') as new_file:
+               new_file.write(stream)
+            stream = f.read(nbytes)
+            count+=1
+   except Exception as e:
       print(e)
 
-def readlines(fn):
-   '''Lê o arquivo fornecido e retorna uma lista com as linhas'''
+def join(out, fnlist):
    try:
-      with open(fn) as f: return f.readlines()
-   except (UnicodeDecodeError, OSError) as e:
+      for fn in fnlist:
+         with open(fn) as f:
+
+            count=1
+            stream = f.read(nbytes)
+            while stream:
+            new = "%s_%03d" %(fn,count)
+            with open(new, mode='wt') as new_file:
+               new_file.write(stream)
+            stream = f.read(nbytes)
+            count+=1
+   except Exception as e:
       print(e)
 
-
-def read(fn):
-   '''Lê todas as linhas do arquivo em uma única strig e a retorna'''
+def gen_tuple(fn):
+   '''
+   Exercicio 3 - Python para desenvolvedores
+   Lê um arquivo csv e retorna seu conteúdo em tupla. Linhas vazias devem ser eliminadas.
+   A função retorna uma expressão geradora. Em um objeto gerador cada item é gerado somente quando
+   é necessário (não se cria uma lista antes, a lista é criada on the fly a cada iteração) o que
+   permite economizar memória.'''
    try:
-      with open(fn) as f: return f.read()
-   except (UnicodeDecodeError, OSError) as e:
+      with open(fn) as f:
+         text = map(str.rstrip, f.readlines())
+   except Exception as e:
       print(e)
+      return None
+   else:
+      return (tuple(line.split(',')) for line in text if line)
 
-def write(fn, s):
-   '''Escreve s dentro do arquivo filename não existente.'''
+def gen_dict(fn):
+   '''Lê um arquivo csv e retorna um gerador de dicionários das linhas.'''
    try:
-      with open(fn, mode="wt") as f: f.write(s)
-   except (UnicodeDecodeError, OSError) as e:
-     print(e)
+      with open(fn) as f:
+         text = map(str.rstrip, f.readlines())
+   except Exception as e:
+      print(e)
+      return None
+   else:
+      header, *data = filter(bool, text)
+      return (dict(zip(header.split(','),record.split(','))) for record in data if record)
 
-def writelines(fn, linelist):
-   '''Cria um arquivo e escreve a lista lines dentro.'''
-   try:
-      with open(fn, mode="wt") as f:
-         for line in linelist: print(line, file=f)
-   except (UnicodeDecodeError, OSError) as e:
-     print(e)
 
-def read_csv(fn):
+def deprecated_read_csv(fn):
    '''Lê um arquivo csv e retorna uma lista de dicionários das linhas.'''
    try:
       with open(fn) as f:
@@ -75,8 +95,7 @@ def read_csv(fn):
       print(e)
    else:
       return [ dict(zip(header,record)) for record in data ]
-
-def csv_to_dict(fn):
+def deprecated_csv_to_dict(fn):
    '''
    Primeiramente o conteúdo do arquivo lido é dividido entre a primeira posição (o header com nome
    de todos os campos) e os dados. Nesse processo as funções rstrip() e split(',') cuidam de tirar
@@ -110,4 +129,12 @@ def csv_to_dict(fn):
    else:
       datalist = [ dict(zip(header,record)) for record in data ]
       return { rec['cadastro']:rec for rec in datalist }
-
+def info(fn):
+   '''Exibe informações sobre o arquivo fornecido'''
+   try:
+      with open(fn) as f:
+         text = f.read()
+      return "%s : %d char(s), %d linha(s) e %d palavra(s)." \
+              %(fn, len(text), text.count("\n"), len(text.split()))
+   except Exception as e:
+      print(e)
