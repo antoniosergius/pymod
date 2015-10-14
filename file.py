@@ -23,7 +23,43 @@
 #
 #  ---
 #
+
 def split(fn, nbytes):
+   '''
+   Exercicio 4 - Python para desenvolvedores.
+   Divide o arquivo fn em nbytes e grava em novos arquivos. Se o arquivo for arq.txt, será gravado
+   arq.txt_001, arq.txt_002, etc..
+   '''
+   try:
+      with open(fn, mode='rb') as f:
+         _bytes = bytearray(f.read())
+      parts = 1
+      while _bytes:
+         LIMIT = slice(0,nbytes)
+         out = _bytes[LIMIT].decode('utf8')
+         del _bytes[LIMIT]
+         with open("%s_%03d" % (fn,parts), mode='wb') as fileout:
+            fileout.write(out.encode('utf8'))
+         parts += 1
+   except Exception as e:
+      print(e)
+
+def join(outname, fnlist):
+   '''
+   Exercício 4 - Python para desenvolvedores
+   Juntar os arquivos da lista fnlist em um unico arquivo outname e gravar no disco.
+   '''
+   try:
+      out = b''
+      for fn in fnlist:
+         with open(fn, mode='rb') as f:
+            out += f.read()
+      with open(outname, mode='wb') as outfile:
+         outfile.write(out)
+   except Exception as e:
+      print(e)
+
+def split_text(fn, nbytes):
    '''
    Exercicio 4 - Python para desenvolvedores.
    Divide o arquivo fn em nbytes e grava em novos arquivos. Se o arquivo for arq.txt, será gravado
@@ -33,7 +69,7 @@ def split(fn, nbytes):
          count=1
          stream = f.read(nbytes)
          while stream:
-            new = "%s_%03d" %(fn,count)
+            new = "%s_%03d" % (fn,count)
             with open(new, mode='wt') as new_file:
                new_file.write(stream)
             stream = f.read(nbytes)
@@ -41,26 +77,25 @@ def split(fn, nbytes):
    except Exception as e:
       print(e)
 
-def join(out, fnlist):
+def join_text(outname, fnlist):
+   '''
+   Exercício 4 - Python para desenvolvedores
+   Juntar os arquivos da lista fnlist em um unico arquivo outname e gravar no disco.
+   '''
    try:
       for fn in fnlist:
+         text = ''
          with open(fn) as f:
-
-            count=1
-            stream = f.read(nbytes)
-            while stream:
-            new = "%s_%03d" %(fn,count)
-            with open(new, mode='wt') as new_file:
-               new_file.write(stream)
-            stream = f.read(nbytes)
-            count+=1
+            text+=f.read()
+      with open(outname, mode='wt') as outfile:
+         outfile.write(text)
    except Exception as e:
       print(e)
 
 def gen_tuple(fn):
    '''
    Exercicio 3 - Python para desenvolvedores
-   Lê um arquivo csv e retorna seu conteúdo em tupla. Linhas vazias devem ser eliminadas.
+   Lê um arquivo csv e retorna seu conteúdo em tupla. Linhas vazias serão eliminadas.
    A função retorna uma expressão geradora. Em um objeto gerador cada item é gerado somente quando
    é necessário (não se cria uma lista antes, a lista é criada on the fly a cada iteração) o que
    permite economizar memória.'''
@@ -129,6 +164,7 @@ def deprecated_csv_to_dict(fn):
    else:
       datalist = [ dict(zip(header,record)) for record in data ]
       return { rec['cadastro']:rec for rec in datalist }
+
 def info(fn):
    '''Exibe informações sobre o arquivo fornecido'''
    try:
