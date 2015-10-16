@@ -137,12 +137,8 @@ def reg_valid(reg):
       return _is_cpf(reg)
    elif size==14:
       return _is_cnpj(reg)
-   elif size>=15 and reg[0]=='0':
-      START = slice(size-14)
-      END = slice(size-14,size)
-      prefix, rest = reg[START], reg[END]
-      if prefix.count('0') == len(prefix):
-         return _is_cnpj(rest)
+   elif size>14:
+      return _is_cnpj(reg_reduce(reg))
    return False
 
 def reg_random():
@@ -162,11 +158,14 @@ def reg_format(reg):
       return "%s.%s.%s-%s" % (reg[:3], reg[3:6], reg[6:9], reg[9:11])
    else:
       return "%s.%s.%s/%s-%s" % (reg[:2], reg[2:5], reg[5:8], reg[8:12], reg[12:14])
-   return -1
 
-def reduce_cnpj(reg):
+def reg_reduce(reg):
+   '''
+   Retira os zeros a esquerda de uma string maior que 14.
+   Caso algum caracter não seja 0, a mesma string fornecida é retornada.
+   '''
    size = len(reg)
-   if size>=15 and reg[0]=='0':
+   if size>14 and reg[0]=='0':
       START = slice(size-14)
       END = slice(size-14,size)
       prefix, rest = reg[START], reg[END]
