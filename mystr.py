@@ -125,5 +125,6 @@ def wordcount(text):
    dic = {}
    for word in text.split():
       dic[word] = 1 if word not in dic else dic[word]+1
-   for word, times in sorted(dic.items(), key=itemgetter(1,0)):
-      print("{:<30s}{}".format(word, times))
+   #for word, times in sorted(dic.items(), key=itemgetter(1,0)):
+   #   print("{:<30s}{}".format(word, times))
+   return dic

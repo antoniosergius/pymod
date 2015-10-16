@@ -52,7 +52,7 @@ def flatten(it):
    else:
       return [it]
 
-def mysort(lst, pos=0, reverse=False):
+def sort_matrix(lst, pos=0, reverse=False):
    '''
    Recebe uma lista de dupla dimensão (matriz) e ordena pela posição especificada
    no argumento pos. Se for omitido a list será ordenada com base no primeiro item
@@ -73,6 +73,27 @@ def statistics(dic):
    rate = summ / len(dic)
    variance = max(dic.values())-min(dic.values())
    return summ, rate, variance
+
+def gen_cpf(stop):
+   from random import randint
+   if not isinstance(stop, int) or stop<1:
+      return None
+   for i in range(stop):
+      cpf = str(randint(100000000,999999999))
+      count, summ, flag = 0, 0, 10
+      while flag <= 11:
+         summ = 0
+         for n in range(flag, 1, -1):
+            summ += int(cpf[count])*n
+            count += 1
+         remainder = summ % 11
+         if remainder < 2:
+            cpf += '0'
+         else:
+            cpf += str(11-remainder)
+         count = 0
+         flag += 1
+      yield cpf
 
 def validate(cad):
    '''

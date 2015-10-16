@@ -53,22 +53,25 @@ def gen_prime(stop):
 
    if not isinstance(stop,int) or stop<=1:
       return []
-   divisors = [2]+list(range(3,stop+1,2))
-   for num in divisors:
-      if is_prime(num):
-         yield num
+   if stop>=2:
+      yield 2
+   divisors = list(range(3,stop+1,2))
+   for n in divisors:
+      if is_prime(n):
+         yield n
 
 def range_prime(start, stop):
    '''Gerador de números primos naturais'''
 
-   if not isinstance(start, int) or not isinstance(stop,int) or stop<=start or start<0:
+   if not isinstance(start, int) or not isinstance(stop,int) or stop<=start: #or start<0:
       return None
-   if start <= 2:
+   if start<=2:
+      start=2
       yield 2
    start += 0 if start%2 else 1
-   for num in range(start,stop+1,2):
-      if is_prime(num):
-         yield num
+   for n in range(start,stop+1,2):
+      if is_prime(n):
+         yield n
 
 def matrix_sum(*matrices):
    '''Soma matrizes de duas dimensões'''
