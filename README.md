@@ -1,9 +1,8 @@
 ## Synopsis
 
 python3 - https://github.com/antoniosergius/python3.git
-At the top of the file there should be a short introduction and/ or
-overview that explains **what** the project is. This description should
-match descriptions added for package managers (Gemspec, package.json, etc.)
+Esse projeto reune pequenos módulos e aplicativos em python 3.
+A intenção é acostumar com a linguagem.
 Author: Antônio Sérgio Garcia Ferreira - antoniosergio@mail.com
 Date  : 2015/09/17 00:07:59
 

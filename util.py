@@ -25,23 +25,9 @@
 #
 import re
 
-def replace(old, new, lst):
-   '''
-   Substitui old por new na lista lst.
-   Raises TypeError se lst não for uma lista.
-   '''
-   if not isinstance(lst, list):
-      raise TypeError("Error: Invalid type. lst must be list.")
-   for i, item in enumerate(lst):
-      if item == old:
-         lst.pop(i)
-         lst.insert(i, new)
-         break
-
 def flatten(it):
    '''
    flatten(it) -> list
-
    Recebe uma lista de várias dimensões e retorna uma de dimensão única.
    '''
    if isinstance(it, list):
@@ -51,19 +37,6 @@ def flatten(it):
       return ls
    else:
       return [it]
-
-def sort_matrix(lst, pos=0, reverse=False):
-   '''
-   Recebe uma lista de dupla dimensão (matriz) e ordena pela posição especificada
-   no argumento pos. Se for omitido a list será ordenada com base no primeiro item
-   (pos 0).
-   '''
-   if not isinstance(lst,list) or not lst or pos>len(lst[0])-1:
-      return None
-   def _key(x):
-      return x[pos]
-   lst.sort(key=_key, reverse=reverse)
-   return lst
 
 def statistics(dic):
    '''Retorna a média, soma, variação de um dicionário com valores númericos.'''
@@ -79,7 +52,7 @@ def gen_cpf(stop):
    if not isinstance(stop, int) or stop<1:
       return None
    for i in range(stop):
-      cpf = str(randint(100000000,999999999))
+      cpf = "%09d" % randint(0,999999999)
       count, summ, flag = 0, 0, 10
       while flag <= 11:
          summ = 0

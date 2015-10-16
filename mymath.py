@@ -48,21 +48,24 @@ def is_prime(n):
          return False
    return True
 
-def gen_prime(stop):
+def gen_primes(stop):
    '''Gerador de números primos naturais'''
 
    if not isinstance(stop,int) or stop<=1:
-      return []
+      return None
    if stop>=2:
       yield 2
-   divisors = list(range(3,stop+1,2))
-   for n in divisors:
+   for n in range(3,stop+1,2):
       if is_prime(n):
          yield n
 
-def range_prime(start, stop):
-   '''Gerador de números primos naturais'''
+def count_primes():
+   '''Gerador infinito de números primos'''
+   from itertools import count
+   return (n for n in count() if is_prime(n))
 
+def range_primes(start, stop):
+   '''Gerador de números primos naturais'''
    if not isinstance(start, int) or not isinstance(stop,int) or stop<=start: #or start<0:
       return None
    if start<=2:
@@ -81,3 +84,16 @@ def matrix_sum(*matrices):
          for y,col in enumerate(row):
             head[x][y] += col
    return head
+
+def sort_matrix(lst, pos=0, reverse=False):
+   '''
+   Recebe uma lista de dupla dimensão (matriz) e ordena pela posição especificada
+   no argumento pos. Se for omitido a list será ordenada com base no primeiro item
+   (pos 0).
+   '''
+   if not isinstance(lst,list) or not lst or pos>len(lst[0])-1:
+      return None
+   def _key(x):
+      return x[pos]
+   lst.sort(key=_key, reverse=reverse)
+   return lst

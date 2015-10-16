@@ -27,7 +27,6 @@
 def align(text, width, char=' '):
    '''
    align(text, width, char=' ') -> str
-
    Alinha a str text com espaços de acordo com o tamanho definido em width.
    Retorna uma string no tamanho de width com text no centro.
    '''
@@ -36,18 +35,10 @@ def align(text, width, char=' '):
    left = right+blanks%2
    return "%s %s %s" %(left*char, text, right*char)
 
-def strip(s):
-   '''
-   strip(s) -> str
-
-   Retora a string sem o primeiro e último caracteres.
-   '''
-   return s[1:-1]
 
 def subs_count(substring, s):
    '''
    subs_count(substring, s) -> int
-
    Retorna a quantidade de ocorrências de sub em s.
    '''
    if not substring: return 0
@@ -60,7 +51,6 @@ def subs_count(substring, s):
 def lower(text):
    '''
    lower(text) -> str
-
    Retorna o texto informado em minúsculo ou -1 se text não for string.
    '''
    if not isinstance(text, str) or not text:
@@ -74,7 +64,6 @@ def lower(text):
 def upper(text):
    '''
    upper(text) -> str
-
    Retorna o texto informado em maiúsculo ou -1 se text não for string.
    '''
    if not isinstance(text, str) or not text:
@@ -88,7 +77,6 @@ def upper(text):
 def is_palindrome(text):
    '''
    ispalindrome(string) -> bool
-
    Verifica se a string é palíndrome, ou seja, possui o mesmo formato
    se for invertida. Por exemplo: ana, adida, 00a00, iiisssiii, noninon, zazaz
    '''
@@ -102,7 +90,6 @@ def is_palindrome(text):
 def reverse(s):
    '''
    reverse(s) -> str
-
    Pega a frase s e inverte cada palavra. A ordem das palavras é mantida.
    '''
    if not isinstance(s, str) or not s:
@@ -125,6 +112,6 @@ def wordcount(text):
    dic = {}
    for word in text.split():
       dic[word] = 1 if word not in dic else dic[word]+1
-   #for word, times in sorted(dic.items(), key=itemgetter(1,0)):
-   #   print("{:<30s}{}".format(word, times))
-   return dic
+   for word, times in sorted(dic.items(), key=itemgetter(1,0)):
+      print("{:<30s}{}".format(word, times))
+   #return dic
