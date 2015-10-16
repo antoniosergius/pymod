@@ -39,7 +39,7 @@ def adder(expr):
 
 def is_prime(n):
    '''
-   isprime(n) -> bool
+   is_prime(n) -> bool
 
    Verifica se o número n inteiro REAL é primo. O método utilizado é o seguinte: inicialmente
    é considerado -1,0,1 como não primos e o módulo de dois como primo. Em seguida é feita
@@ -51,13 +51,42 @@ def is_prime(n):
    n=abs(n)
    if n==2:
       return True
-   divisors = list(range(3,int(n**0.5+1),2))
-   divisors.insert(0, 2)
+   divisors = [2] + list(range(3,int(n**0.5+1),2))
    for num in divisors:
       if not n%num:
          return False
    else:
       return True
+
+def gen_prime(stop):
+   '''
+   gen_prime(stop) -> list
+   Gerador de números primos naturais
+   '''
+   if not isinstance(stop,int) or stop<=1:
+      return []
+   divisors = [2]+list(range(3,stop+1,2))
+   for num in divisors:
+      if is_prime(num):
+         yield num
+
+def range_prime(start=0, stop=42):
+   '''
+   range_prime(start=0,stop=42) -> list
+   Gerador de números primos naturais
+   '''
+   if not isinstance(start, int) or not isinstance(stop,int) or stop<=start or start<0:
+      return None
+   divisors = []
+   if start <=2:
+      divisors += [2]
+   if not start%2:
+      divisors += [start]
+      start += 1
+   divisors += list(range(start,stop+1,2))
+   for num in divisors:
+      if is_prime(num):
+         yield num
 
 def matrix_sum(*matrices):
    '''

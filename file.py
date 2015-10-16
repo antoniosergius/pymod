@@ -120,6 +120,15 @@ def gen_dict(fn):
       header, *data = filter(bool, text)
       return (dict(zip(header.split(','),record.split(','))) for record in data if record)
 
+def info(fn):
+   '''Exibe informações sobre o arquivo fornecido'''
+   try:
+      with open(fn) as f:
+         text = f.read()
+      return "%s : %d char(s), %d linha(s) e %d palavra(s)." \
+              %(fn, len(text), text.count("\n"), len(text.split()))
+   except Exception as e:
+      print(e)
 
 def deprecated_read_csv(fn):
    '''Lê um arquivo csv e retorna uma lista de dicionários das linhas.'''
@@ -165,12 +174,4 @@ def deprecated_csv_to_dict(fn):
       datalist = [ dict(zip(header,record)) for record in data ]
       return { rec['cadastro']:rec for rec in datalist }
 
-def info(fn):
-   '''Exibe informações sobre o arquivo fornecido'''
-   try:
-      with open(fn) as f:
-         text = f.read()
-      return "%s : %d char(s), %d linha(s) e %d palavra(s)." \
-              %(fn, len(text), text.count("\n"), len(text.split()))
-   except Exception as e:
-      print(e)
+

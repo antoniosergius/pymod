@@ -111,3 +111,19 @@ def reverse(s):
    for i in range(len(words)):
       words[i] = words[i][::-1]
    return ' '.join(words)
+
+def wordcount(text):
+   '''Conta ocorrências de palavras no texto fornecido.'''
+   from string import punctuation
+   from operator import itemgetter
+   if not isinstance(text,str) or not text:
+      return 0
+   else:
+      text = text.lower()
+   for ch in punctuation:
+      text = text.replace(ch, ' ')
+   dic = {}
+   for word in text.split():
+      dic[word] = 1 if word not in dic else dic[word]+1
+   for word, times in sorted(dic.items(), key=itemgetter(1,0)):
+      print("{:<30s}{}".format(word, times))
