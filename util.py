@@ -47,7 +47,8 @@ def statistics(dic):
    variance = max(dic.values())-min(dic.values())
    return summ, rate, variance
 
-def gen_cpf(stop):
+def gen_cpf(stop=1):
+   '''Gerador de CPF'''
    from random import randint
    if not isinstance(stop, int) or stop<1:
       return None
@@ -60,21 +61,39 @@ def gen_cpf(stop):
             summ += int(cpf[count])*n
             count += 1
          remainder = summ % 11
-         if remainder < 2:
-            cpf += '0'
-         else:
-            cpf += str(11-remainder)
-         count = 0
+         cpf += '0' if remainder<2 else str(11-remainder)
          flag += 1
+         count = 0
       yield cpf
 
-def validate(cad):
-   '''
-   Verifica se cad é um cadastro (cpf/cnpj) válido.
-   Retorna True se for válido.
-   '''
-   def _iscnpj(cnpj):
-      '''Função interna que verifica o cnpj.'''
+def gen_cnpj(stop=1):
+   '''Gerador de CPNJ'''
+   from random import randint
+   if not isinstance(stop, int) or stop<1:
+      return None
+   for i in range(stop):
+      cnpj = "%08d" % randint(0,99999999)
+      cnpj +="%04d" % randint(0,9)
+      count, summ, flag = 0, 0, 5
+      while flag <= 6:
+         summ = 0
+         for n in range(flag, 1, -1):
+            summ += int(cnpj[count])*n
+            count += 1
+         for n in range(9, 1, -1):
+            summ += int(cnpj[count])*n
+            count += 1
+         remainder = summ % 11
+         cnpj += '0' if remainder<2 else str(11-remainder)
+         flag += 1
+         count = 0
+      yield cnpj
+
+def reg_valid(reg):
+   '''Retorna True se o registro reg for um CPF/CNPJ válido.'''
+
+   def _is_cnpj(cnpj):
+      '''Função interna que valida o cnpj.'''
       count, summ, flag = 0, 0, 5
       while flag <= 6:
          summ = 0
@@ -91,9 +110,8 @@ def validate(cad):
          count = 0
          flag += 1
       else: return True
-
-   def _iscpf(cpf):
-      '''Função interna que verifica o cpf.'''
+   def _is_cpf(cpf):
+      '''Função interna que valida o cpf.'''
       head,*body,tail = cpf
       if head==tail and body.count(head)==9: return False
       count, summ, flag = 0, 0, 10
@@ -110,19 +128,48 @@ def validate(cad):
          flag += 1
       else: return True
 
-   if not isinstance(cad, str):
+   if not isinstance(reg, str):
       return False
-   elif not cad.isdigit():
+   elif not reg.isdigit():
       return False
-   size = len(cad)
+   size = len(reg)
    if size==11:
-      return _iscpf(cad)
+      return _is_cpf(reg)
    elif size==14:
-      return _iscnpj(cad)
-   elif size>=15 and cad[0]=='0':
+      return _is_cnpj(reg)
+   elif size>=15 and reg[0]=='0':
       START = slice(size-14)
       END = slice(size-14,size)
-      prefix, rest = cad[START], cad[END]
+      prefix, rest = reg[START], reg[END]
       if prefix.count('0') == len(prefix):
-         return _iscnpj(rest)
+         return _is_cnpj(rest)
    return False
+
+def reg_random():
+   '''Randomiza registro (CNPJ/CPF)'''
+   from random import choice
+   return choice((next(gen_cpf()),next(gen_cnpj())))
+
+def reg_raw(reg):
+   "Remove caracteres especiais de cpf e cnpj"
+   for sym in './-':
+      reg = reg.replace(sym,'')
+   return reg
+
+def reg_format(reg):
+   "Formata cpf e cnpj"
+   if len(reg)==11:
+      return "%s.%s.%s-%s" % (reg[:3], reg[3:6], reg[6:9], reg[9:11])
+   else:
+      return "%s.%s.%s/%s-%s" % (reg[:2], reg[2:5], reg[5:8], reg[8:12], reg[12:14])
+   return -1
+
+def reduce_cnpj(reg):
+   size = len(reg)
+   if size>=15 and reg[0]=='0':
+      START = slice(size-14)
+      END = slice(size-14,size)
+      prefix, rest = reg[START], reg[END]
+      if prefix.count('0') == len(prefix):
+         return rest
+   return reg

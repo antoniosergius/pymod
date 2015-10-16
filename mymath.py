@@ -23,15 +23,6 @@
 #
 #  ---
 #
-def adder(expr):
-   '''Retorna o resultado da adição fornecida em str.'''
-   if not isinstance(expr,str):
-      return None
-   oper = expr.find("+")
-   if oper==-1:
-      return None
-   return float(expr[:oper])+float(expr[oper+1:])
-
 def is_prime(n):
    '''Verifica se o número n inteiro REAL é primo. Inicialmente -1,0 e 1 são considerados
    não primos e |2|, primo. Em seguida gera-se uma lista iniciando de 3 até raiz quadrada
@@ -42,15 +33,15 @@ def is_prime(n):
    n=abs(n)
    if n==2:
       return True
-   divisors = [2] + list(range(3,int(n**0.5+1),2))
-   for num in divisors:
+   if not n%2:
+      return False
+   for num in range(3,int(n**0.5+1),2):
       if not n%num:
          return False
    return True
 
 def gen_primes(stop):
    '''Gerador de números primos naturais'''
-
    if not isinstance(stop,int) or stop<=1:
       return None
    if stop>=2:
@@ -58,11 +49,6 @@ def gen_primes(stop):
    for n in range(3,stop+1,2):
       if is_prime(n):
          yield n
-
-def count_primes():
-   '''Gerador infinito de números primos'''
-   from itertools import count
-   return (n for n in count() if is_prime(n))
 
 def range_primes(start, stop):
    '''Gerador de números primos naturais'''
@@ -75,6 +61,12 @@ def range_primes(start, stop):
    for n in range(start,stop+1,2):
       if is_prime(n):
          yield n
+
+def count_primes():
+   '''Gerador infinito de números primos'''
+   from itertools import count
+   return (n for n in count() if is_prime(n))
+
 
 def matrix_sum(*matrices):
    '''Soma matrizes de duas dimensões'''
