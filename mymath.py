@@ -24,12 +24,7 @@
 #  ---
 #
 def adder(expr):
-   '''
-   adder(expr) -> (int,float)
-
-   Recebe uma expressão no formato n+n. n pode ser int ou float.
-   Retorna o resultado da expressão fornecida.
-   '''
+   '''Retorna o resultado da adição fornecida em str.'''
    if not isinstance(expr,str):
       return None
    oper = expr.find("+")
@@ -38,14 +33,10 @@ def adder(expr):
    return float(expr[:oper])+float(expr[oper+1:])
 
 def is_prime(n):
-   '''
-   is_prime(n) -> bool
+   '''Verifica se o número n inteiro REAL é primo. Inicialmente -1,0 e 1 são considerados
+   não primos e |2|, primo. Em seguida gera-se uma lista iniciando de 3 até raiz quadrada
+   de |n|. Os pares não são incluídos na lista, pois são números compostos.'''
 
-   Verifica se o número n inteiro REAL é primo. O método utilizado é o seguinte: inicialmente
-   é considerado -1,0,1 como não primos e o módulo de dois como primo. Em seguida é feita
-   uma lista começando de 3 até a raiz quadrada do módulo do número fornecido, sem
-   os pares que são compostos. O número 2 (dois) é inserido para para saber se n é par.
-   '''
    if not isinstance(n,int) or n in (-1, 0, 1):
       return False
    n=abs(n)
@@ -55,14 +46,11 @@ def is_prime(n):
    for num in divisors:
       if not n%num:
          return False
-   else:
-      return True
+   return True
 
 def gen_prime(stop):
-   '''
-   gen_prime(stop) -> list
-   Gerador de números primos naturais
-   '''
+   '''Gerador de números primos naturais'''
+
    if not isinstance(stop,int) or stop<=1:
       return []
    divisors = [2]+list(range(3,stop+1,2))
@@ -70,28 +58,20 @@ def gen_prime(stop):
       if is_prime(num):
          yield num
 
-def range_prime(start=0, stop=42):
-   '''
-   range_prime(start=0,stop=42) -> list
-   Gerador de números primos naturais
-   '''
+def range_prime(start, stop):
+   '''Gerador de números primos naturais'''
+
    if not isinstance(start, int) or not isinstance(stop,int) or stop<=start or start<0:
       return None
-   divisors = []
-   if start <=2:
-      divisors += [2]
-   if not start%2:
-      divisors += [start]
-      start += 1
-   divisors += list(range(start,stop+1,2))
-   for num in divisors:
+   if start <= 2:
+      yield 2
+   start += 0 if start%2 else 1
+   for num in range(start,stop+1,2):
       if is_prime(num):
          yield num
 
 def matrix_sum(*matrices):
-   '''
-   Soma matrizes de duas dimensões
-   '''
+   '''Soma matrizes de duas dimensões'''
    head, *tail = matrices
    for matrix in tail:
       for x,row in enumerate(matrix):
