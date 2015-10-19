@@ -23,8 +23,6 @@
 #
 #  ---
 #
-import re
-
 def flatten(it):
    '''
    flatten(it) -> list

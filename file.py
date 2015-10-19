@@ -23,7 +23,6 @@
 #
 #  ---
 #
-import fileinput
 
 def split(fn, nbytes):
    '''
@@ -39,47 +38,9 @@ def split(fn, nbytes):
          LIMIT = slice(0,nbytes)
          out = _bytes[LIMIT].decode('utf8')
          del _bytes[LIMIT]
-         with open("{}_{:03d}".format(fn,parts), mode='wb') as fout:
+         with open("{}_{:03d}".format(fn,parts), 'wb') as fout:
             fout.write(out.encode('utf8'))
          parts += 1
-   except Exception as e:
-      print(e)
-
-def gen_files(files):
-   for f in files:
-      with open(f,'rt') as fin:
-         for line in fin:
-            yield line
-
-def gen_chunk(files):
-   for f in files:
-      with open(f,'rt') as fin:
-         yield fin.read()
-
-def join_chunk(new, ls):
-   '''
-   Exercício 4 - Python para desenvolvedores - metodo sem concatenação de strings
-   Juntar os arquivos da lista fnlist em um unico arquivo outname e gravar no disco.
-   '''
-   try:
-      out = [chunk for chunk in gen_chunk(ls)]
-      with open(new,'wt') as fout:
-         fout.writelines(out)
-   except Exception as e:
-      print(e)
-
-def join(new, ls):
-   '''
-   Exercício 4 - Python para desenvolvedores - metodo sem concatenação de strings
-   Juntar os arquivos da lista fnlist em um unico arquivo outname e gravar no disco.
-   '''
-   try:
-      out = []
-      for fn in ls:
-         with open(fn,'rb') as f:
-            out.append(f.read())
-      with open(new,'wb') as fout:
-         fout.writelines(out)
    except Exception as e:
       print(e)
 
@@ -100,22 +61,42 @@ def split_text(fn, nbytes):
    except Exception as e:
       print(e)
 
-def join_text(new, ls):
+def join(new, ls):
    '''
-   Exercício 4 - Python para desenvolvedores
+   Exercício 4 - Python para desenvolvedores - metodo sem concatenação de strings
    Juntar os arquivos da lista fnlist em um unico arquivo outname e gravar no disco.
    '''
    try:
-      for fn in ls:
-         out = []
-         with open(fn) as f:
-            out.append(f.read())
+      out = [chunk for chunk in gen_chunks(ls,mode='rb')]
+      with open(new,'wb') as fout:
+         fout.writelines(out)
+   except Exception as e:
+      print(e)
+
+def join_text(new, ls):
+   '''
+   Exercício 4 - Python para desenvolvedores - metodo sem concatenação de strings
+   Juntar os arquivos da lista fnlist em um unico arquivo outname e gravar no disco.
+   '''
+   try:
+      out = [chunk for chunk in gen_chunks(ls)]
       with open(new,'wt') as fout:
          fout.writelines(out)
    except Exception as e:
       print(e)
 
-def gen_tuple(fn):
+def gen_lines(files, mode='rt'):
+   for f in files:
+      with open(f, mode) as fin:
+         for line in fin:
+            yield line
+
+def gen_chunks(files, mode='rt'):
+   for f in files:
+      with open(f, mode) as fin:
+         yield fin.read()
+
+def gen_tuples(fn):
    '''
    Exercicio 3 - Python para desenvolvedores
    Lê um arquivo csv e retorna seu conteúdo em tupla. Linhas vazias serão eliminadas.
@@ -124,24 +105,24 @@ def gen_tuple(fn):
    permite economizar memória.'''
    try:
       with open(fn) as f:
-         text = map(str.rstrip, f.readlines())
+         for line in f:
+            line = line.rstrip()
+            if line:
+               yield tuple(line.split(','))
    except Exception as e:
       print(e)
-      return None
-   else:
-      return (tuple(line.split(',')) for line in text if line)
 
-def gen_dict(fn):
+def gen_dicts(fn):
    '''Lê um arquivo csv e retorna um gerador de dicionários das linhas.'''
    try:
       with open(fn) as f:
-         text = map(str.rstrip, f.readlines())
+         header = f.readline().rstrip()
+         for line in f:
+            line = line.rstrip()
+            if line:
+               yield dict(zip(header.split(','),line.split(',')))
    except Exception as e:
       print(e)
-      return None
-   else:
-      header, *data = filter(bool, text)
-      return (dict(zip(header.split(','),record.split(','))) for record in data if record)
 
 def info(fn):
    '''Exibe informações sobre o arquivo fornecido'''
@@ -153,48 +134,89 @@ def info(fn):
    except Exception as e:
       print(e)
 
-def deprecated_read_csv(fn):
-   '''Lê um arquivo csv e retorna uma lista de dicionários das linhas.'''
-   try:
-      with open(fn) as f:
-         header, *data = [ line.rstrip().split(',') for line in f if line]
-   except (IOError,UnicodeDecodeError) as e:
-      print(e)
-   else:
-      return [ dict(zip(header,record)) for record in data ]
-def deprecated_csv_to_dict(fn):
-   '''
-   Primeiramente o conteúdo do arquivo lido é dividido entre a primeira posição (o header com nome
-   de todos os campos) e os dados. Nesse processo as funções rstrip() e split(',') cuidam de tirar
-   os caracteres fim de linha e dividir a string (separador ',') e trasformar em lista.
 
-   Neste momento os dados estão da seguinte forma:
+#def join(new, ls):
+   #'''
+   #Exercício 4 - Python para desenvolvedores - metodo sem concatenação de strings
+   #Juntar os arquivos da lista fnlist em um unico arquivo outname e gravar no disco.
+   #'''
+   #try:
+      #out = []
+      #for fn in ls:
+         #with open(fn,'rb') as f:
+            #out.append(f.read())
+      #with open(new,'wb') as fout:
+         #fout.writelines(out)
+   #except Exception as e:
+      #print(e)
+#def gen_dict(fn):
+   #'''Lê um arquivo csv e retorna um gerador de dicionários das linhas.'''
+   #try:
+      #with open(fn) as f:
+         #text = map(str.rstrip, f.readlines())
+   #except Exception as e:
+      #print(e)
+      #return None
+   #else:
+      #header, *data = filter(bool, text)
+      #return (dict(zip(header.split(','),record.split(','))) for record in data if record)
 
-   header -> ['nome','cadastro', ....]
-   data   -> [['Antonio Sergio','10008121205', ...], ['Goncalves Jr.','84421541241', ...], ...]
+#def deprecated_read_csv(fn):
+   #'''Lê um arquivo csv e retorna uma lista de dicionários das linhas.'''
+   #try:
+      #with open(fn) as f:
+         #header, *data = [ line.rstrip().split(',') for line in f if line]
+   #except (IOError,UnicodeDecodeError) as e:
+      #print(e)
+   #else:
+      #return [ dict(zip(header,record)) for record in data ]
+#def deprecated_csv_to_dict(fn):
+   #'''
+   #Primeiramente o conteúdo do arquivo lido é dividido entre a primeira posição (o header com nome
+   #de todos os campos) e os dados. Nesse processo as funções rstrip() e split(',') cuidam de tirar
+   #os caracteres fim de linha e dividir a string (separador ',') e trasformar em lista.
 
-   O próximo passoo é criar um dicionário que a chave seja um campo principal ('cadastro' no
-   meu caso) e o valor seja a representação do registro em forma de dicionário. A variável datalist
-   receberá uma lista de dicionários de cada registro. A função zip trata de combinar o nome dos
-   campos com os valores.
+   #Neste momento os dados estão da seguinte forma:
 
-   datalist -> [ {'nome':'Antonio Sergio','cadastro':'10008121205',...},
-                 {'nome':'Goncalves Jr.' ,'cadastro':'84421541241',...},
-                ... ]
+   #header -> ['nome','cadastro', ....]
+   #data   -> [['Antonio Sergio','10008121205', ...], ['Goncalves Jr.','84421541241', ...], ...]
 
-   Finalmente é retornado outro dicionário no seguinte formato:
-   { '10008121205': {'nome':'Antonio Sergio', 'cadastro':'10008121205', ....},
-     '84421541241': {'nome':'Goncalves Jr.' , 'cadastro':'84421541241', ....},
-      ... }
+   #O próximo passoo é criar um dicionário que a chave seja um campo principal ('cadastro' no
+   #meu caso) e o valor seja a representação do registro em forma de dicionário. A variável datalist
+   #receberá uma lista de dicionários de cada registro. A função zip trata de combinar o nome dos
+   #campos com os valores.
 
-   '''
-   try:
-      with open(fn) as f:
-         header, *data = [ line.rstrip().split(',') for line in f if line]
-   except (OSError,UnicodeDecodeError) as e:
-      print(e)
-   else:
-      datalist = [ dict(zip(header,record)) for record in data ]
-      return { rec['cadastro']:rec for rec in datalist }
+   #datalist -> [ {'nome':'Antonio Sergio','cadastro':'10008121205',...},
+                 #{'nome':'Goncalves Jr.' ,'cadastro':'84421541241',...},
+                #... ]
 
+   #Finalmente é retornado outro dicionário no seguinte formato:
+   #{ '10008121205': {'nome':'Antonio Sergio', 'cadastro':'10008121205', ....},
+     #'84421541241': {'nome':'Goncalves Jr.' , 'cadastro':'84421541241', ....},
+      #... }
 
+   #'''
+   #try:
+      #with open(fn) as f:
+         #header, *data = [ line.rstrip().split(',') for line in f if line]
+   #except (OSError,UnicodeDecodeError) as e:
+      #print(e)
+   #else:
+      #datalist = [ dict(zip(header,record)) for record in data ]
+      #return { rec['cadastro']:rec for rec in datalist }
+
+#def gen_tuple(fn):
+   #'''
+   #Exercicio 3 - Python para desenvolvedores
+   #Lê um arquivo csv e retorna seu conteúdo em tupla. Linhas vazias serão eliminadas.
+   #A função retorna uma expressão geradora. Em um objeto gerador cada item é gerado somente quando
+   #é necessário (não se cria uma lista antes, a lista é criada on the fly a cada iteração) o que
+   #permite economizar memória.'''
+   #try:
+      #with open(fn) as f:
+         #text = map(str.rstrip, f.readlines())
+   #except Exception as e:
+      #print(e)
+      #return None
+   #else:
+      #return (tuple(line.split(',')) for line in text if line)
