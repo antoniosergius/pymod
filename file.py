@@ -23,74 +23,95 @@
 #
 #  ---
 #
+import fileinput
 
 def split(fn, nbytes):
    '''
    Exercicio 4 - Python para desenvolvedores.
-   Divide o arquivo fn em nbytes e grava em novos arquivos. Se o arquivo for arq.txt, será gravado
-   arq.txt_001, arq.txt_002, etc..
+   Divide o arquivo fn em nbytes e grava em novos arquivos. Se o arquivo for arq, será gravado
+   arq_001, arq_002, etc..
    '''
    try:
-      with open(fn, mode='rb') as f:
+      with open(fn,'rb') as f:
          _bytes = bytearray(f.read())
       parts = 1
       while _bytes:
          LIMIT = slice(0,nbytes)
          out = _bytes[LIMIT].decode('utf8')
          del _bytes[LIMIT]
-         with open("%s_%03d" % (fn,parts), mode='wb') as fileout:
-            fileout.write(out.encode('utf8'))
+         with open("{}_{:03d}".format(fn,parts), mode='wb') as fout:
+            fout.write(out.encode('utf8'))
          parts += 1
    except Exception as e:
       print(e)
 
-def join(outname, fnlist):
+def gen_files(files):
+   for f in files:
+      with open(f,'rt') as fin:
+         for line in fin:
+            yield line
+
+def join(new, ls):
    '''
-   Exercício 4 - Python para desenvolvedores
+   Exercício 4 - Python para desenvolvedores - metodo sem concatenação de strings
    Juntar os arquivos da lista fnlist em um unico arquivo outname e gravar no disco.
    '''
    try:
-      out = b''
-      for fn in fnlist:
-         with open(fn, mode='rb') as f:
-            out += f.read()
-      with open(outname, mode='wb') as outfile:
-         outfile.write(out)
+      out = []
+      for fn in ls:
+         with open(fn,'rb') as f:
+            out.append(f.read())
+      with open(new,'wb') as fout:
+         fout.writelines(out)
    except Exception as e:
       print(e)
 
 def split_text(fn, nbytes):
    '''
    Exercicio 4 - Python para desenvolvedores.
-   Divide o arquivo fn em nbytes e grava em novos arquivos. Se o arquivo for arq.txt, será gravado
-   arq.txt_001, arq.txt_002, etc..'''
+   Divide o arquivo fn em nbytes e grava em novos arquivos. Se o arquivo for arq, será gravado
+   arq_001, arq_002, etc..'''
    try:
       with open(fn) as f:
          count=1
          stream = f.read(nbytes)
          while stream:
-            new = "%s_%03d" % (fn,count)
-            with open(new, mode='wt') as new_file:
-               new_file.write(stream)
+            with open("{}_{:03d}".format(fn,count), 'wt') as fout:
+               fout.write(stream)
             stream = f.read(nbytes)
             count+=1
    except Exception as e:
       print(e)
 
-def join_text(outname, fnlist):
+def join_text(new, ls):
    '''
    Exercício 4 - Python para desenvolvedores
    Juntar os arquivos da lista fnlist em um unico arquivo outname e gravar no disco.
    '''
    try:
-      for fn in fnlist:
-         text = ''
+      for fn in ls:
+         out = []
          with open(fn) as f:
-            text+=f.read()
-      with open(outname, mode='wt') as outfile:
-         outfile.write(text)
+            out.append(f.read())
+      with open(new,'wt') as fout:
+         fout.writelines(out)
    except Exception as e:
       print(e)
+
+#def join_text(outname, fnlist):
+   #'''
+   #Exercício 4 - Python para desenvolvedores
+   #Juntar os arquivos da lista fnlist em um unico arquivo outname e gravar no disco.
+   #'''
+   #try:
+      #for fn in fnlist:
+         #text = ''
+         #with open(fn) as f:
+            #text+=f.read()
+      #with open(outname, mode='wt') as outfile:
+         #outfile.write(text)
+   #except Exception as e:
+      #print(e)
 
 def gen_tuple(fn):
    '''
