@@ -51,6 +51,23 @@ def gen_files(files):
          for line in fin:
             yield line
 
+def gen_chunk(files):
+   for f in files:
+      with open(f,'rt') as fin:
+         yield fin.read()
+
+def join_chunk(new, ls):
+   '''
+   Exercício 4 - Python para desenvolvedores - metodo sem concatenação de strings
+   Juntar os arquivos da lista fnlist em um unico arquivo outname e gravar no disco.
+   '''
+   try:
+      out = [chunk for chunk in gen_chunk(ls)]
+      with open(new,'wt') as fout:
+         fout.writelines(out)
+   except Exception as e:
+      print(e)
+
 def join(new, ls):
    '''
    Exercício 4 - Python para desenvolvedores - metodo sem concatenação de strings
@@ -97,21 +114,6 @@ def join_text(new, ls):
          fout.writelines(out)
    except Exception as e:
       print(e)
-
-#def join_text(outname, fnlist):
-   #'''
-   #Exercício 4 - Python para desenvolvedores
-   #Juntar os arquivos da lista fnlist em um unico arquivo outname e gravar no disco.
-   #'''
-   #try:
-      #for fn in fnlist:
-         #text = ''
-         #with open(fn) as f:
-            #text+=f.read()
-      #with open(outname, mode='wt') as outfile:
-         #outfile.write(text)
-   #except Exception as e:
-      #print(e)
 
 def gen_tuple(fn):
    '''
