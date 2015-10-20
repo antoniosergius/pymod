@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.4
 #
-#  mystr.py
+#  text.py
 #
 #  Copyright 2015 Antônio Sérgio Garcia Ferreira <antoniosergio@mail.com>
 #
@@ -23,7 +23,6 @@
 #
 #  ---
 #
-
 def align(text, width, char=' '):
    '''
    align(text, width, char=' ') -> str
@@ -107,11 +106,12 @@ def wordcount(text):
       return 0
    else:
       text = text.lower()
-   for ch in punctuation:
-      text = text.replace(ch, ' ')
+   for sym in punctuation:
+      text = text.replace(sym, ' ')
    dic = {}
    for word in text.split():
       dic[word] = 1 if word not in dic else dic[word]+1
    for word, times in sorted(dic.items(), key=itemgetter(1,0)):
-      print("{:<30s}{}".format(word, times))
+      print("{1:>d}={0:<s}".format(word, times))
+      #print("{:_<20s}{}".format(word, times))
    #return dic

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3.4
 #
-#  mymath.py
+#  matrix.py
 #
 #  Copyright 2015 Antônio Sérgio Garcia Ferreira <antoniosergio@mail.com>
 #
@@ -23,52 +23,8 @@
 #
 #  ---
 #
-def is_prime(n):
-   '''Verifica se o número n inteiro REAL é primo. Inicialmente -1,0 e 1 são considerados
-   não primos e |2|, primo. Em seguida gera-se uma lista iniciando de 3 até raiz quadrada
-   de |n|. Os pares não são incluídos na lista, pois são números compostos.'''
 
-   if not isinstance(n,int) or n in (-1, 0, 1):
-      return False
-   n=abs(n)
-   if n==2:
-      return True
-   if not n%2:
-      return False
-   for num in range(3,int(n**0.5+1),2):
-      if not n%num:
-         return False
-   return True
-
-def gen_primes(stop):
-   '''Gerador de números primos naturais'''
-   if not isinstance(stop,int) or stop<=1:
-      return None
-   if stop>=2:
-      yield 2
-   for n in range(3,stop+1,2):
-      if is_prime(n):
-         yield n
-
-def range_primes(start, stop):
-   '''Gerador de números primos naturais'''
-   if not isinstance(start, int) or not isinstance(stop,int) or stop<=start: #or start<0:
-      return None
-   if start<=2:
-      start=2
-      yield 2
-   start += 0 if start%2 else 1
-   for n in range(start,stop+1,2):
-      if is_prime(n):
-         yield n
-
-def count_primes():
-   '''Gerador infinito de números primos'''
-   from itertools import count
-   return (n for n in count() if is_prime(n))
-
-
-def matrix_sum(*matrices):
+def msum(*matrices):
    '''Soma matrizes de duas dimensões'''
    head, *tail = matrices
    for matrix in tail:
@@ -77,8 +33,9 @@ def matrix_sum(*matrices):
             head[x][y] += col
    return head
 
-def sort_matrix(lst, pos=0, reverse=False):
+def sort(lst, pos=0, reverse=False):
    '''
+   Exercício - Python para desenvolvedores
    Recebe uma lista de dupla dimensão (matriz) e ordena pela posição especificada
    no argumento pos. Se for omitido a list será ordenada com base no primeiro item
    (pos 0).
@@ -89,3 +46,4 @@ def sort_matrix(lst, pos=0, reverse=False):
       return x[pos]
    lst.sort(key=_key, reverse=reverse)
    return lst
+

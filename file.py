@@ -26,8 +26,9 @@
 
 def split(fn, nbytes):
    '''
-   Exercicio 4 - Python para desenvolvedores.
-   Divide o arquivo fn em nbytes e grava em novos arquivos. Se o arquivo for arq, será gravado
+   Exercicio 4.1 - Python para desenvolvedores.
+   Divide o arquivo fn em arquivos de tamanho igual a nbytes.
+   Uma divisão de um arquivo nomeado 'arq' ficará da seguinte maneira:
    arq_001, arq_002, etc..
    '''
    try:
@@ -44,27 +45,10 @@ def split(fn, nbytes):
    except Exception as e:
       print(e)
 
-def split_text(fn, nbytes):
-   '''
-   Exercicio 4 - Python para desenvolvedores.
-   Divide o arquivo fn em nbytes e grava em novos arquivos. Se o arquivo for arq, será gravado
-   arq_001, arq_002, etc..'''
-   try:
-      with open(fn) as f:
-         count=1
-         stream = f.read(nbytes)
-         while stream:
-            with open("{}_{:03d}".format(fn,count), 'wt') as fout:
-               fout.write(stream)
-            stream = f.read(nbytes)
-            count+=1
-   except Exception as e:
-      print(e)
-
 def join(new, ls):
    '''
-   Exercício 4 - Python para desenvolvedores - metodo sem concatenação de strings
-   Juntar os arquivos da lista fnlist em um unico arquivo outname e gravar no disco.
+   Exercício 4.2 - Python para desenvolvedores
+   Junta os arquivos da lista 'ls' em um único arquivo 'new'.
    '''
    try:
       out = [chunk for chunk in gen_chunks(ls,mode='rb')]
@@ -73,30 +57,29 @@ def join(new, ls):
    except Exception as e:
       print(e)
 
-def join_text(new, ls):
+def gen_lines(ls, mode='rt'):
    '''
-   Exercício 4 - Python para desenvolvedores - metodo sem concatenação de strings
-   Juntar os arquivos da lista fnlist em um unico arquivo outname e gravar no disco.
+   Gerador de linhas de uma lista de arquivos
+   O usuário fornece uma lista 'ls' com o nome dos arquivos.
+   Em seguida é gerada cada linha de cada arquivo em ordem.
    '''
-   try:
-      out = [chunk for chunk in gen_chunks(ls)]
-      with open(new,'wt') as fout:
-         fout.writelines(out)
-   except Exception as e:
-      print(e)
-
-def gen_lines(files, mode='rt'):
-   for f in files:
-      with open(f, mode) as fin:
-         for line in fin:
+   for filename in ls:
+      with open(filename, mode) as f:
+         for line in f:
             yield line
 
-def gen_chunks(files, mode='rt'):
-   for f in files:
-      with open(f, mode) as fin:
-         yield fin.read()
+def gen_chunks(ls, mode='rt'):
+   '''
+   Gerador de arquivos
+   O usuário fornece uma lista 'ls' com o nome dos arquivos.
+   Em seguida é lido cada arquivo com uma única operação f.read(),
+   o que difere de f.readline() que lê linha por vez.
+   '''
+   for filename in ls:
+      with open(filename, mode) as f:
+         yield f.read()
 
-def gen_tuples(fn):
+def cvs_tuple(fn):
    '''
    Exercicio 3 - Python para desenvolvedores
    Lê um arquivo csv e retorna seu conteúdo em tupla. Linhas vazias serão eliminadas.
@@ -112,8 +95,12 @@ def gen_tuples(fn):
    except Exception as e:
       print(e)
 
-def gen_dicts(fn):
-   '''Lê um arquivo csv e retorna um gerador de dicionários das linhas.'''
+def cvs_dict(fn):
+   '''
+   Lê um arquivo csv e retorna um gerador de dicionários das linhas.
+   A função zip junta dois campos de duas estruturas de dados diferentes
+   em uma única.
+   '''
    try:
       with open(fn) as f:
          header = f.readline().rstrip()
@@ -124,16 +111,62 @@ def gen_dicts(fn):
    except Exception as e:
       print(e)
 
-def info(fn):
+def info(filename):
    '''Exibe informações sobre o arquivo fornecido'''
    try:
-      with open(fn) as f:
-         text = f.read()
-      return "%s : %d char(s), %d linha(s) e %d palavra(s)." \
-              %(fn, len(text), text.count("\n"), len(text.split()))
+      content = next(gen_chunks([filename]))
+      return "{s}: {d} char(s), {d} linha(s) e {d} palavra(s)"\
+            .format(filename,
+                    len(content),
+                    text.count("\n"),
+                    len(content.split())
+                    )
    except Exception as e:
       print(e)
 
+#def info(filename):
+   #'''Exibe informações sobre o arquivo fornecido'''
+   #try:
+      #with open(filename) as f:
+         #text = f.read()
+      #out = "{}: {} char(s), {} linha(s) e {} palavra(s)"\
+            #.format(filename,
+                    #len(text),
+                    #text.count("\n"),
+                    #len(text.split())
+                    #)
+      #return out
+   #except Exception as e:
+      #print(e)
+
+#def split_text(fn, nbytes):
+   #'''
+   #Exercicio 4 - Python para desenvolvedores.
+   #Divide o arquivo fn em nbytes e grava em novos arquivos. Se o arquivo for arq, será gravado
+   #arq_001, arq_002, etc..'''
+   #try:
+      #with open(fn) as f:
+         #count=1
+         #stream = f.read(nbytes)
+         #while stream:
+            #with open("{}_{:03d}".format(fn,count), 'wt') as fout:
+               #fout.write(stream)
+            #stream = f.read(nbytes)
+            #count+=1
+   #except Exception as e:
+      #print(e)
+
+#def join_text(new, ls):
+   #'''
+   #Exercício 4 - Python para desenvolvedores - metodo sem concatenação de strings
+   #Juntar os arquivos da lista fnlist em um unico arquivo outname e gravar no disco.
+   #'''
+   #try:
+      #out = [chunk for chunk in gen_chunks(ls)]
+      #with open(new,'wt') as fout:
+         #fout.writelines(out)
+   #except Exception as e:
+      #print(e)
 
 #def join(new, ls):
    #'''
@@ -149,6 +182,7 @@ def info(fn):
          #fout.writelines(out)
    #except Exception as e:
       #print(e)
+
 #def gen_dict(fn):
    #'''Lê um arquivo csv e retorna um gerador de dicionários das linhas.'''
    #try:
@@ -170,6 +204,7 @@ def info(fn):
       #print(e)
    #else:
       #return [ dict(zip(header,record)) for record in data ]
+
 #def deprecated_csv_to_dict(fn):
    #'''
    #Primeiramente o conteúdo do arquivo lido é dividido entre a primeira posição (o header com nome

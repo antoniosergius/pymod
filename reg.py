@@ -76,12 +76,18 @@ def raw(reg):
    return reg
 
 def format(reg):
-   "Formata cpf e cnpj"
+   "Formata CPF/CNPJ"
    if len(reg)==11:
-      return "{}.{}.{}-{}".format(reg[:3], reg[3:6], reg[6:9], reg[9:11])
+      return "{}.{}.{}-{}".format(reg[:3],
+                                  reg[3:6],
+                                  reg[6:9],
+                                  reg[9:11])
    else:
-      return "{}.{}.{}/{}-{}".format(reg[:2], reg[2:5], reg[5:8], reg[8:12], reg[12:14])
-
+      return "{}.{}.{}/{}-{}".format(reg[:2],
+                                     reg[2:5],
+                                     reg[5:8],
+                                     reg[8:12],
+                                     reg[12:14])
 def zcut(reg):
    '''
    Retira os zeros a esquerda de uma string maior que 14.
