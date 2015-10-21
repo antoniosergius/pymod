@@ -119,8 +119,7 @@ def info(filename):
             .format(filename,
                     len(content),
                     text.count("\n"),
-                    len(content.split())
-                    )
+                    len(content.split()))
    except Exception as e:
       print(e)
 
