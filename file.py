@@ -23,6 +23,7 @@
 #
 #  ---
 #
+import csv
 
 def split(fn, nbytes):
    '''
@@ -79,35 +80,24 @@ def gen_chunks(ls, mode='rt'):
       with open(filename, mode) as f:
          yield f.read()
 
-def cvs_tuple(fn):
-   '''
-   Exercicio 3 - Python para desenvolvedores
-   Lê um arquivo csv e retorna seu conteúdo em tupla. Linhas vazias serão eliminadas.
-   A função retorna uma expressão geradora. Em um objeto gerador cada item é gerado somente quando
-   é necessário (não se cria uma lista antes, a lista é criada on the fly a cada iteração) o que
-   permite economizar memória.'''
+def csv_list_gen(fn):
+   '''Lê um arquivo csv e retorna seu conteúdo em forma de lista'''
    try:
       with open(fn) as f:
-         for line in f:
-            line = line.rstrip()
-            if line:
-               yield tuple(line.split(','))
+         csv_reader = csv.reader(f)
+         headers = next(csv_reader)
+         for row in csv_reader:
+            yield row
    except Exception as e:
       print(e)
 
-def cvs_dict(fn):
-   '''
-   Lê um arquivo csv e retorna um gerador de dicionários das linhas.
-   A função zip junta dois campos de duas estruturas de dados diferentes
-   em uma única.
-   '''
+def csv_dict_gen(fn):
+   '''Lê um arquivo csv e retorna seu conteúdo em forma de dicionário'''
    try:
       with open(fn) as f:
-         header = f.readline().rstrip()
-         for line in f:
-            line = line.rstrip()
-            if line:
-               yield dict(zip(header.split(','),line.split(',')))
+         csv_reader = csv.DictReader(f)
+         for row in csv_reader:
+            yield row
    except Exception as e:
       print(e)
 
@@ -122,6 +112,38 @@ def info(filename):
                     len(content.split()))
    except Exception as e:
       print(e)
+
+#def csv_tuple_deprecated(fn):
+   #'''
+   #Exercicio 3 - Python para desenvolvedores
+   #Lê um arquivo csv e retorna seu conteúdo em tupla. Linhas vazias serão eliminadas.
+   #A função retorna uma expressão geradora. Em um objeto gerador cada item é gerado somente quando
+   #é necessário (não se cria uma lista antes, a lista é criada on the fly a cada iteração) o que
+   #permite economizar memória.'''
+   #try:
+      #with open(fn) as f:
+         #for line in f:
+            #line = line.rstrip()
+            #if line:
+               #yield tuple(line.split(','))
+   #except Exception as e:
+      #print(e)
+
+#def csv_dict_deprecated(fn):
+   #'''
+   #Lê um arquivo csv e retorna um gerador de dicionários das linhas.
+   #A função zip junta dois campos de duas estruturas de dados diferentes
+   #em uma única.
+   #'''
+   #try:
+      #with open(fn) as f:
+         #header = f.readline().rstrip()
+         #for line in f:
+            #line = line.rstrip()
+            #if line:
+               #yield dict(zip(header.split(','),line.split(',')))
+   #except Exception as e:
+      #print(e)
 
 #def info(filename):
    #'''Exibe informações sobre o arquivo fornecido'''

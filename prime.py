@@ -40,7 +40,7 @@ def is_prime(n):
 
 def gen(start, stop=None):
    '''Gerador de números primos naturais'''
-   if not stop:
+   if stop is None:
       start,stop = 0,start
    if start<2: yield 2
    start += 0 if start%2 else 1
@@ -67,7 +67,7 @@ def randrange(start, stop=None):
    Retorna um número aleatório no intervalo de [start,stop].
    Se stop for omitido, start=0 e stop=start
    '''
-   if not stop:
+   if stop is None:
       start,stop = 0,start
    while True:
       choice = random.randint(start,stop)
