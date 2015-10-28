@@ -24,6 +24,23 @@
 #  ---
 #
 import csv
+import time
+
+def rem_empty_lines(fn):
+    ''' Remove linhas vazias de um arquivo e salva o conteúdo modificado'''
+#    start = time.time()
+    try:
+        with open(fn, mode='r+') as f:
+            content = f.readlines()
+            f.seek(0)
+            for line in content:
+                if line != '\n':
+                    f.write(line)
+            f.truncate()
+    except Exception as e:
+        print(e)
+#    finally:
+#        print(time.time() - start)
 
 def split(fn, nbytes):
    '''
@@ -105,13 +122,29 @@ def info(filename):
    '''Exibe informações sobre o arquivo fornecido'''
    try:
       content = next(gen_chunks([filename]))
-      return "{s}: {d} char(s), {d} linha(s) e {d} palavra(s)"\
+      return "{}: {} char(s), {} linha(s) e {} palavra(s)"\
             .format(filename,
                     len(content),
-                    text.count("\n"),
+                    content.count("\n"),
                     len(content.split()))
    except Exception as e:
       print(e)
+
+#def rem_dup_lines(fn):
+    #''' Remove linhas vazias de um arquivo e salva o conteúdo modificado'''
+    #start = time.time()
+    #try:
+        #with open(fn) as f:
+            #content = list(filter(bool, f.read().split('\n')))
+        #with open(fn, mode='w+') as f:
+            #for line in content:
+                #f.write(line)
+                #f.write('\n')
+    #except Exception as e:
+        #print(e)
+    #finally:
+        #print(time.time() - start)
+
 
 #def csv_tuple_deprecated(fn):
    #'''
