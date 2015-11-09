@@ -45,3 +45,26 @@ def statistics(dic):
    variance = max(dic.values())-min(dic.values())
    return summ, rate, variance
 
+#def rgb_list():
+   #rgb = []
+   #for r in range(254):
+      #for g in range(254):
+         #for b in range(254):
+            #rgb.append((r,g,b))
+   #return rgb
+
+#def rgb_gen():
+   #for r in range(254):
+      #for g in range(254):
+         #for b in range(254):
+            #yield r,g,b
+
+#def test_rgb():
+   #from time import time
+   #start = time()
+   #rgb = rgb_list()
+   #print(time() - start)
+   #start = time()
+   #rgb = []
+   #for color in rgb_gen(): pass
+   #print(time() - start)
