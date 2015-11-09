@@ -108,10 +108,29 @@ def wordcount(text):
       text = text.lower()
    for sym in punctuation:
       text = text.replace(sym, ' ')
-   dic = {}
+   counter = {}
    for word in text.split():
-      dic[word] = 1 if word not in dic else dic[word]+1
-   for word, times in sorted(dic.items(), key=itemgetter(1,0)):
-      print("{1:>d}={0:<s}".format(word, times))
-      #print("{:_<20s}{}".format(word, times))
-   #return dic
+      if word not in counter:
+         counter[word] = 1
+      else:
+         counter[word]+= 1
+   return sorted(counter.items(), key=itemgetter(1,0))
+
+
+#def wordcount(text):
+   #'''Conta ocorrências de palavras no texto fornecido.'''
+   #from string import punctuation
+   #from operator import itemgetter
+   #if not isinstance(text,str) or not text:
+      #return 0
+   #else:
+      #text = text.lower()
+   #for sym in punctuation:
+      #text = text.replace(sym, ' ')
+   #dic = {}
+   #for word in text.split():
+      #dic[word] = 1 if word not in dic else dic[word]+1
+   ##for word, times in sorted(dic.items(), key=itemgetter(1,0)):
+      ##print("{1:>d}={0:<s}".format(word, times))
+      ##print("{:_<20s}{}".format(word, times))
+   #return sorted(dic.items(), key=itemgetter(1,0))
